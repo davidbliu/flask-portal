@@ -8,4 +8,5 @@ def go_home():
 	golinks = all_golinks()
 	return render_template('golinks.html', golinks = golinks)
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=3000)
+    #app.run()
