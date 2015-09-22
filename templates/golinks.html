@@ -4,7 +4,8 @@
 }
 </style>
 
-<h1>these are the golinks</h1>
+<h1>These are the golinks</h1>
+<h2>There are {{num_golinks}} golinks</h2>
 {% for golink in golinks %}
 <div>{{golink.key}}: <span class = 'green'>{{golink.url}}</span></div>
 {% endfor %}

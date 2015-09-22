@@ -34,17 +34,28 @@ class ParseEventMember(Object):
 
 """ convenient access methods: examples  """
 
+""" members access methods """
+def all_members():
+	return [x for x in ParseMember.Query.all().limit(sys.maxint)]
+""" blog access methods """
 def all_blogposts():
 	return BlogPost.Query.all().limit(sys.maxint)
 
+""" Points access methods """
+
+def event_members():
+	return ParseEventMember.Query.all()
+
+def events():
+	return ParseEvent.Query.all()
+
+""" PBL Links accessing methods """
 def all_golinks():
 	return ParseGoLink.Query.all().limit(sys.maxint)
 
-def speed_test():
-	return [x.get_tags() for x in all_golinks() if x.get_tags()]  # if x.key == 'fb group'] # and 'ht' in x.tags]
-
 def tag_query(tag):
 	return [x for x in all_golinks() if tag in x.get_tags()]
+
 if __name__=='__main__':
 	#members = ParseMember.Query.all().limit(100000)
 	#member_names = [x.name for x in members]
