@@ -1,26 +1,43 @@
 <html>
   <head>
     <title>My Angular App!</title>
+
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
    <style type = 'text/css'>
    .url{
    	color:green;
    }
+   #search-input{
+    width:50%;
+   }
+   body{
+    padding-left:15px;
+    padding-right:15px;
+   }
    </style>
+
+
   </head>
   <body>
 
 <div ng-app="myApp" ng-controller="myCtrl">
 	<h1>PBL Links Explorer</h1>
 
-  	<input id = 'search-input' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
-  	<h1>here are my {[{ numLinks}]} golinks</h1>
+  	<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
+
+    <div id = 'options-container'>
+      <button class = 'btn btn-default' ng-click='getDashboard()'>Dashboard</button>
+      <button class = 'btn btn-default' ng-click='getPopular()'>Popular</button>
+    </div>
+  	<h1>Displaying {{ numLinks}} links</h1>
   	<ul>
-  		<li ng-repeat="golink in golinks"><a class = 'key' href = '{[{golink.attributes.url}]}'>{[{golink.attributes.key}]}</a>
+  		<li ng-repeat="golink in golinks"><a class = 'key' href = '{{golink.attributes.url}}'>{{golink.attributes.key}}</a>
   			<ul>
-  				<li class = 'url'>{[{golink.attributes.url}]}</li>
-  				<li class = 'description'>{[{golink.attributes.description}]}</li>
+  				<li class = 'url'>{{golink.attributes.url}}</li>
+  				<li class = 'description'>{{golink.attributes.description}}</li>
   			</ul>
   		</li>
   	</ul>
@@ -42,9 +59,8 @@ function getToken(){
 	email = 'davidbliu@gmail.com';
 	return toHex(email);
 }
-var app = angular.module('myApp', []).config(function($interpolateProvider){
-    $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
-});
+var app = angular.module('myApp', []);
+
 app.controller('myCtrl', function($scope, $http) {
 	function getGoLinks(page){
 		 $http.get(ROOT_URL + '/api/all_golinks?page='+page.toString()+'&token='+getToken()).
@@ -68,8 +84,13 @@ app.controller('myCtrl', function($scope, $http) {
     		console.log(data);
     	});
 	}
-   	getGoLinks(1);
-    
+  function getDashboardLinks(){
+
+  }
+  function getPopularLinks(){
+
+  }
+   	getGoLinks(1); // pull the first page of golinks from the getgo
     $scope.firstName= "David";
     $scope.lastName= "Liu";
     $scope.filterName = 'filter pubs';
@@ -82,6 +103,20 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.nextPage = function() {
     	$scope.page+=1
     	getGoLinks($scope.page);
+    };
+    $scope.getClicks = function(){
+      $http.get(ROOT_URL + '/api/recent_clicks'). //?search_term='+searchTerm+'&page=1&token='+getToken()).
+      success(function(data, status, headers, config){
+        $scope.golinks = data;
+        $scope.numLinks = data.length;
+      }).
+      error(function(data, status, headers, config){
+        console.log('there was an error');
+        console.log(data);
+      });
+    }
+    $scope.getPopular = function(){
+      getPopularLink();
     };
 });
 </script>

@@ -1,0 +1,30 @@
+<style type = 'text/css'>
+.golink-td{
+  width:25%;
+}
+</style>
+<div>
+  	<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
+
+    <div id = 'options-container'>
+    </div>
+  	<h1>Displaying {{ numLinks}} links</h1>
+  	<table class = 'table table-striped'>
+      <thead>
+        <th>key</th>
+        <th>url</th>
+        <th>description</th>
+        <th>num_clicks</th>
+      </thead>
+      <tbody>
+  		<tr ng-repeat='golink in golinks'>
+        <td class = 'golink-td'>{{golink.attributes.key}}</td>
+        <td class = 'golink-td'>{{golink.attributes.num_clicks}}</td>
+        <td class = 'golink-td'>{{golink.attributes.description}}</td>
+        <td class = 'golink-td'>{{golink.attributes.url}}</td>
+        
+        
+      </tr>
+  		</tbody>
+  	</table>
+</div>

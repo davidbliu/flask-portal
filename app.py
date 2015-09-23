@@ -13,7 +13,7 @@ def go_home():
 
 @app.route('/angular')
 def angular_home():
-	return render_template('angular_index.html', members = [x.to_json() for x in ParseMember.Query.all()])
+	return render_template('angular_index.html')
 
 @app.route('/members')
 def members():

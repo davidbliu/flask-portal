@@ -1,0 +1,15 @@
+<h1>{{title}}</h1>
+
+<h2>Recent Clicks</h2>
+<table>
+	<thead>
+		<th>email</th>
+		<th>num clicks</th>
+	</thead>
+	<tbody>
+		<tr ng-repeat = "user in users | orderBy:'-num_clicks'">
+			<td>{{user.email}}</td>
+			<td>{{user.num_clicks}}</td>
+		</tr>
+	</tbody>
+</table>
