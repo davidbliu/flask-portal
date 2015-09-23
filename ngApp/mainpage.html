@@ -27,10 +27,14 @@
 
   </head>
   <body ng-app="goApp">
-    <h1>PBL Links Explorer</h1>
-    <a href = '#/analytics'><button class = 'btn btn-default'>Analytics</button></a>
-    <a href = '#/users'><button class = 'btn btn-default'>Users</button></a>
-    <a href = '#/'><button class = 'btn btn-default'>Home</button></a>
+    <div style = 'width:100%;text-align:center'>
+      <h1>PBL Links Explorer</h1>
+      <a href = '#/analytics'><button class = 'btn btn-default'>Analytics</button></a>
+      <a href = '#/users'><button class = 'btn btn-default'>Users</button></a>
+      <a href = '#/'><button class = 'btn btn-default'>Home</button></a>
+      <a href = '#/recent'><button class = 'btn btn-default'>Recent</button></a>
+      <a href = '#/trends'><button class = 'btn btn-default'>Trends</button></a>
+    </div>
     <div class = 'content-container'>
      <div ng-view=''></div>
     </div>

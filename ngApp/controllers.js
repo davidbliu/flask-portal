@@ -3,13 +3,10 @@ ROOT_URL = 'http://localhost:3001';
 var app = angular.module('goApp', ['ngRoute']);
 app.config(function($routeProvider) {
     $routeProvider
-        // route for the home page
         .when('/', {
             templateUrl : 'views/home.html',
             controller  : 'GoController'
         })
-
-        // route for the about page
         .when('/analytics', {
             templateUrl : 'views/analytics.html',
             controller  : 'AnalyticsController'
@@ -33,9 +30,24 @@ app.controller('UsersController', function($scope, $http){
         console.log('there was an error');
       });
   }
+  function getUserClicks(email){
+    $http.get(ROOT_URL + '/api/user_clicks?email='+email).
+      success(function(data, status, headers, config){
+        $scope.userClicks = data;
+      }).
+      error(function(data, status, headers, config){
+        console.log('there was an error fetching user clicks');
+      });
+  }
   getUsers();
   $scope.title = 'Users Page'
   $scope.users = [];
+  $scope.userClicks = [];
+  $scope.pullUserClicks = function(email){
+    console.log(email);
+    console.log('pulling clicks');
+    getUserClicks(encodeURIComponent(email));
+  };
 });
 
 app.controller('AnalyticsController', function($scope, $http){

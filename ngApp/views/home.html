@@ -9,21 +9,19 @@
     <div id = 'options-container'>
     </div>
   	<h1>Displaying {{ numLinks}} links</h1>
-  	<table class = 'table table-striped'>
+  	<table class = 'table table-condensed'>
       <thead>
         <th>key</th>
-        <th>url</th>
+        <th>clicks</th>
         <th>description</th>
-        <th>num_clicks</th>
+        <th>url</th>
       </thead>
       <tbody>
   		<tr ng-repeat='golink in golinks'>
         <td class = 'golink-td'>{{golink.attributes.key}}</td>
         <td class = 'golink-td'>{{golink.attributes.num_clicks}}</td>
         <td class = 'golink-td'>{{golink.attributes.description}}</td>
-        <td class = 'golink-td'>{{golink.attributes.url}}</td>
-        
-        
+        <td class = 'golink-td'><a href = '{{golink.attributes.url}}'>{{golink.attributes.url}}</a></td>
       </tr>
   		</tbody>
   	</table>
