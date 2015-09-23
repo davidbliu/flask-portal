@@ -17,3 +17,7 @@ we will have some other app (maybe this flask app, maybe something else) serving
 * app.py : main flask appp
 * seeds.py : data, gets data from parse
 
+# Running the /ngApp
+start a dummy python server: "python -m SimpleHTTPServer 8000"
+
+navigate to localhost:8000 in the browser, click the mainpage.html
