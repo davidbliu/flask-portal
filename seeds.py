@@ -7,6 +7,15 @@ register(application_id, client_key)
 
 """ Data @ WD Models """
 class ParseMember(Object):
+	def to_dict(self):
+		return self.__dict__
+	def to_json(self):
+		d = self.to_dict()
+		return {
+			'name': str(d['name']), 
+			'email': str(d['email']) if 'email' in d.keys() else 'none', 
+			'committee': str(d['committee']) if 'committee' in d.keys() else 'none'
+		}
 	pass
 
 class ParseGoLink(Object):

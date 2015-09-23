@@ -2,6 +2,7 @@ from flask import Flask
 from flask import Flask, request, jsonify, render_template
 from seeds import *
 import sys
+import json
 app = Flask(__name__)
 
 """ DEMO Routes """
@@ -9,6 +10,10 @@ app = Flask(__name__)
 def go_home():
 	golinks = all_golinks()
 	return render_template('golinks.html', golinks = golinks, num_golinks = len(golinks))
+
+@app.route('/angular')
+def angular_home():
+	return render_template('angular_index.html', members = [x.to_json() for x in ParseMember.Query.all()])
 
 @app.route('/members')
 def members():

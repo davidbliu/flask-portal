@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>My Angular App!</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+
+   <script>
+   console.log('testing this');
+   var members = {{members|safe}};
+   console.log(members);
+   </script>
+
+  </head>
+  <body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+  	<h1>Angular App {[{firstName + " " + lastName}]}</h1>
+	<p>Name: <input type="text" ng-model="name"></p>
+	<p ng-bind="name"></p>
+  	<h2>list of all the members</h2>
+  	<button ng-click = "filterPubs()">{[{ filterName }]}</button>
+  	<ul>
+  		<li data-ng-repeat = "member in members">{[{member['name'] }]} : {[{member['email']}]} : {[{member['committee']}]}</li>
+  	</ul>
+</div>
+
+
+
+
+
+<script>
+var app = angular.module('myApp', []).config(function($interpolateProvider){
+    $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+});
+app.controller('myCtrl', function($scope) {
+    $scope.firstName= "David";
+    $scope.lastName= "Liu";
+    $scope.members = members;
+    $scope.filterName = 'filter pubs';
+    $scope.filterPubs = function() {
+    	$scope.members = members.splice(0, 10);
+    	console.log($scope.members);
+    	$scope.filterName='filter all';
+    };
+});
+</script>
+
+
+</body>
+</html>
