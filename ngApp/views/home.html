@@ -2,27 +2,34 @@
 .golink-td{
   width:25%;
 }
+.blue{
+  color:#1A0DAB;
+}
+.green{
+  color:#006621 !important;
+}
+.golink-div{
+  margin-bottom:5px;
+}
+.centered{
+  width:100%;
+  text-align: center;
+}
+#search-input{
+  margin-left:25%;
+  width:50%;
+}
 </style>
-<div>
+<div class = 'centered'>
+  
   	<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
 
-    <div id = 'options-container'>
-    </div>
   	<h1>Displaying {{ numLinks}} links</h1>
-  	<table class = 'table table-condensed'>
-      <thead>
-        <th>key</th>
-        <th>clicks</th>
-        <th>description</th>
-        <th>url</th>
-      </thead>
-      <tbody>
-  		<tr ng-repeat='golink in golinks'>
-        <td class = 'golink-td'>{{golink.attributes.key}}</td>
-        <td class = 'golink-td'>{{golink.attributes.num_clicks}}</td>
-        <td class = 'golink-td'>{{golink.attributes.description}}</td>
-        <td class = 'golink-td'><a href = '{{golink.attributes.url}}'>{{golink.attributes.url}}</a></td>
-      </tr>
-  		</tbody>
-  	</table>
+  		<div ng-repeat='golink in golinks' class = 'golink-div'>
+        <div><a class = 'blue' href = '{{golink.attributes.url}}'>{{golink.attributes.key}}</a></div>
+        <div class = 'green'>{{golink.attributes.url | limitTo:70}}</div>
+        <div class = ''>{{golink.attributes.description}} ({{golink.attributes.num_clicks}} clicks)</div>
+        <div class = 'text-muted'>Permissions: "{{golink.attributes.permissions}}", Added: {{golink.attributes.createdAt}}, Added by: {{golink.attributes.member_email}}, <a href = 'javascript:void(0)'>Edit</a></div>
+
+      </div>
 </div>
