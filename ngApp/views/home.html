@@ -36,6 +36,13 @@
   border:1px solid rgba(0,0,0,0.1);
   padding:15px;
   margin:15px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+}
+.left-content{
+  width:85%;
+}
+.type-image{
+  margin-top:10px;
 }
 </style>
 <style type = 'text/css'>
@@ -59,11 +66,16 @@
       <div class = 'golinks-container'>
     		<div ng-repeat='golink in golinks' class = 'golink-div'>
           <div class = 'show-content' ng-hide = 'editing'>
-            <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a></div>
-            <div class = 'green'>{{golink.url | limitTo:70}}</div>
-            <div class = ''>{{golink.description}}</div>
-            <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: {{golink.member_email}}, {{golink.num_clicks}} clicks, tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div></div>
-            <div><a href = 'javascript:void(0)' ng-click='editing = true'>Edit</a></div>
+            <div>
+              <div class = 'pull-right'><img class = 'type-image' ng-src = './images/{{ image_hash[golink.type] }}' height=35/></div>
+              <div class = 'left-content'>
+                <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a></div>
+                <div class = 'green'>{{golink.url | limitTo:70}}</div>
+                <div class = ''>{{golink.description}}</div>
+                <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: {{golink.member_email}}, {{golink.num_clicks}} clicks, tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div></div>
+                <div><a href = 'javascript:void(0)' ng-click='editing = true'>Edit</a></div>
+              </div>
+            </div>
           </div>
           <!-- end of show content -->
 
@@ -112,6 +124,12 @@
     <div class = 'col-md-6'>
       <div class = 'side-card'>
         <h2>Trending Links</h2>
+
+        <h2>Most Popular Links</h2>
+        <div ng-repeat = 'golink in popularLinks | limitTo:10'>
+          <div><span class = 'blue'>{{golink.key}}</span> ({{golink.num_clicks}})</div>
+          <div class = 'green'>{{golink.url | limitTo: 70}}</div>
+        </div>
       </div>
       <div class = 'side-card'>
         <h2>Tag Cloud</h2>

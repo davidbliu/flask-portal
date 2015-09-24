@@ -1,4 +1,5 @@
-ROOT_URL = 'http://testing.berkeley-pbl.com';
+// ROOT_URL = 'http://testing.berkeley-pbl.com';
+ROOT_URL = 'http://localhost:3000'
 var token = '';
 var app = angular.module('goApp', ['ngRoute']);
 app.config(function($routeProvider) {
@@ -94,7 +95,18 @@ app.controller('GoController', function($scope, $http) {
     		console.log(data);
     	});
 	}
-   	getGoLinks(1); // pull the first page of golinks when the page is first loaded
+    function getPopularLinks(){
+      $http.get(ROOT_URL + '/api/popular_golinks?token='+getToken()).
+      success(function(data, status, headers, config){
+        $scope.popularLinks = data;
+      }).
+      error(function(data, status, headers, config){
+        console.log('there was an error');
+      });
+
+    }
+    getPopularLinks();
+    getGoLinks(1); // pull the first page of golinks when the page is first loaded
     $scope.firstName= "David";
     $scope.lastName= "Liu";
     $scope.filterName = 'filter pubs';
@@ -123,6 +135,24 @@ app.controller('GoController', function($scope, $http) {
     $scope.getPopular = function(){
       getPopularLink();
     };
+    $scope.getImageSrc = function(type){
+        return './images/box-icon.png';
+    };
+    $scope.image_hash = {}
+      $scope.image_hash['document'] = 'docs-icon.png'
+      $scope.image_hash['spreadsheets'] = 'sheets-icon.png'
+      $scope.image_hash['facebook'] = 'facebook-icon.png'
+      $scope.image_hash['trello'] = 'trello-logo.png'
+      $scope.image_hash['youtube'] = 'youtube-icon.png'
+      $scope.image_hash['box'] = 'box-icon.png'
+      $scope.image_hash['piazza'] = 'piazza-icon.png'
+      $scope.image_hash['flickr'] = 'flickr-logo.png'
+      $scope.image_hash['git'] = 'git-icon.png'
+      $scope.image_hash['other'] = 'pbl-logo.png'
+      $scope.image_hash['drive'] = 'drive-icon.png'
+      $scope.image_hash['instagram'] = 'instagram-logo.png'
+      $scope.image_hash['presentation'] = 'sheets-icon.png'
+      $scope.image_hash['form'] = 'forms-icon.png'
     $scope.saveGoLink = function(golink){
       id = golink.id;
       console.log('id was '+id);
@@ -156,7 +186,10 @@ app.controller('GoController', function($scope, $http) {
     };
 });
 
-
+function getIconImage(type){
+    
+    return image_hash[type];
+}
 
 function toHex(str) {
     var result = '';
