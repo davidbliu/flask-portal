@@ -4,12 +4,16 @@
 }
 .blue{
   color:#1A0DAB;
+  font-size:18px;
 }
 .green{
   color:#006621 !important;
 }
 .golink-div{
   margin-bottom:5px;
+}
+.golinks-container{
+  margin-left:20px;
 }
 .centered{
   width:100%;
@@ -18,18 +22,102 @@
 #search-input{
   margin-left:25%;
   width:50%;
+  text-align:center;
+  margin-bottom:50px;
+}
+#homepage-container{
+  margin-top:50px;
+}
+.tag-label{
+  opacity:0.5;
+  margin-left:2px;
+}
+.side-card{
+  border:1px solid rgba(0,0,0,0.1);
+  padding:15px;
+  margin:15px;
 }
 </style>
-<div class = 'centered'>
-  
-  	<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
+<style type = 'text/css'>
+.key-input{
+  max-width:300px;
+}
+.input-group{
+  margin-bottom:2px;
+}
+</style>
+<div id = 'homepage-container' class = 'centered row'>
 
-  	<h1>Displaying {{ numLinks}} links</h1>
-  		<div ng-repeat='golink in golinks' class = 'golink-div'>
-        <div><a class = 'blue' href = '{{golink.attributes.url}}'>{{golink.attributes.key}}</a></div>
-        <div class = 'green'>{{golink.attributes.url | limitTo:70}}</div>
-        <div class = ''>{{golink.attributes.description}} ({{golink.attributes.num_clicks}} clicks)</div>
-        <div class = 'text-muted'>Permissions: "{{golink.attributes.permissions}}", Added: {{golink.attributes.createdAt}}, Added by: {{golink.attributes.member_email}}, <a href = 'javascript:void(0)'>Edit</a></div>
+  	<div><input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input></div>
+    <div id = 'search-buttons'>
 
+    </div>
+
+  </div>
+  <div class = 'row'>
+    <div class = 'col-md-6'>
+      <div class = 'golinks-container'>
+    		<div ng-repeat='golink in golinks' class = 'golink-div'>
+          <div class = 'show-content' ng-hide = 'editing'>
+            <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a></div>
+            <div class = 'green'>{{golink.url | limitTo:70}}</div>
+            <div class = ''>{{golink.description}}</div>
+            <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: {{golink.member_email}}, {{golink.num_clicks}} clicks, tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div></div>
+            <div><a href = 'javascript:void(0)' ng-click='editing = true'>Edit</a></div>
+          </div>
+          <!-- end of show content -->
+
+          <div ng-show='editing' class = 'editing-content'>
+            <div class="input-group">
+              <span class="input-group-addon" id="key-addon-{{golink.id}}">Key</span>
+              <input id = '{{golink.id}}-key-input' type="text" class="form-control" placeholder="Key" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.key}}'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon" id="key-addon-{{golink.id}}">URL</span>
+              <input id = '{{golink.id}}-url-input' type="text" class="form-control" placeholder="URL" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.url}}'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon" id="key-addon-{{golink.id}}">Description</span>
+              <input id = '{{golink.id}}-description-input' type="text" class="form-control" placeholder="Description" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.description}}'>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon" id="key-addon-{{golink.id}}">Tags</span>
+              <input id = '{{golink.id}}-tags-input' type="text" class="form-control" placeholder="Description" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.tags.join(",")}}'>
+            </div>
+
+            <div class = 'input-group'>
+              <span class = 'input-group-addon' id = 'key-addon-{{golink.id}}'>Permissions</span>
+              <select  id = '{{ golink.id }}-permissions-input' class = 'form-control permissions-input' aria-describedby="key-addon-{{golink.id}}">
+                <option ng-repeat = 'option in permissionsOptions' ng-selected="option == golink.permissions">{{option}}</option>
+              </select>
+              
+            
+          </div>
+            
+            <div><a href = 'javascript:void(0);' ng-click= 'saveGoLink(golink); editing=false'>Save</a> | <a href = 'javascript:void(0);' ng-click='editing = false'>Cancel</a> | <a href = 'javascript:void(0)'>Delete</a>
+            </div>
+          </div>
+          <!-- end of editing -->
+            
+          </div>
+          <!-- end of golink -->
+        </div>
+        <!-- end of golinks container -->
+     </div>
+     <!-- end of col -->
+
+    <div class = 'col-md-6'>
+      <div class = 'side-card'>
+        <h2>Trending Links</h2>
       </div>
+      <div class = 'side-card'>
+        <h2>Tag Cloud</h2>
+      </div>
+      <div class = 'side-card'>
+        <h2>Week 2 Resources</h2>
+      </div>
+    </div>
 </div>

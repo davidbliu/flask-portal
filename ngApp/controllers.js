@@ -1,5 +1,5 @@
-ROOT_URL = 'http://localhost:3001';
-
+ROOT_URL = 'http://testing.berkeley-pbl.com';
+var token = '';
 var app = angular.module('goApp', ['ngRoute']);
 app.config(function($routeProvider) {
     $routeProvider
@@ -18,6 +18,12 @@ app.config(function($routeProvider) {
         .otherwise({
           'redirect_to': '/'
         });
+});
+app.controller("TokenController", function($scope){
+  $scope.token = 'your token here';
+  $scope.setToken=function(){
+    token = $scope.token;
+  } 
 });
 
 app.controller('UsersController', function($scope, $http){
@@ -88,16 +94,11 @@ app.controller('GoController', function($scope, $http) {
     		console.log(data);
     	});
 	}
-  function getDashboardLinks(){
-
-  }
-  function getPopularLinks(){
-
-  }
-   	getGoLinks(1); // pull the first page of golinks from the getgo
+   	getGoLinks(1); // pull the first page of golinks when the page is first loaded
     $scope.firstName= "David";
     $scope.lastName= "Liu";
     $scope.filterName = 'filter pubs';
+    $scope.permissionsOptions = ['Anyone', 'Only Me', 'Only PBL', 'Only Officers', 'Only Execs'];//[{'id': 'Only Me','label': 'Only Me'},{'id':' Only PBL', 'label':'Only PBL'}];//, 'Only Officers', 'Only Execs', 'Anyone'];
     $scope.page = 1;
     $scope.searchGoLinks = function(){
     	console.log('this was called');
@@ -121,6 +122,37 @@ app.controller('GoController', function($scope, $http) {
     }
     $scope.getPopular = function(){
       getPopularLink();
+    };
+    $scope.saveGoLink = function(golink){
+      id = golink.id;
+      console.log('id was '+id);
+      key = $('#'+id+'-key-input').val();
+      description = $('#'+id+'-description-input').val();
+      permissions = $("#" + id + "-permissions-input option:selected").text();
+      url = $('#'+id+'-url-input').val();
+      tags = $('#'+id+'-tags-input').val().split(',');
+      golink.key = key;
+      golink.url = url;
+      golink.description = description;
+      golink.permissions = permissions;
+      golink.tags = tags;
+      // save the link server side
+      $.ajax({
+        url: ROOT_URL+'/api/save_golink',
+        type: 'POST',
+        data: {'id': id, 'key':key, 
+              'description': description, 
+              'tags': tags.join(','), 
+              'url': url,
+              'permissions': permissions
+        },
+        success:function(data){
+          console.log(data);
+        },
+        error:function (xhr, textStatus, thrownError){
+          console.log('failed');
+        }
+      });
     };
 });
 
