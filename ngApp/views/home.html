@@ -74,6 +74,7 @@
   </div>
   <div class = 'row'>
     <div class = 'col-md-6'>
+      <div ng-show = 'golinks == null'><h2>Pulling data...</h2></div>
       <div class = 'golinks-container'>
     		<div ng-repeat='golink in golinks' class = 'golink-div' >
           <div id = '{{golink.id}}-div'>

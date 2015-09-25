@@ -1,6 +1,6 @@
 <html>
   <head >
-    <title>PBL Links Explorer</title>
+    <title>PooBLe</title>
     <script src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
     <script src = 'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.0/angular-route.js"></script>
@@ -10,14 +10,23 @@
       
     <link rel = 'stylesheet' src = 'angular-chart.css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <script src = './controllers.js'></script>
-
+    <script src = './app.js'></script>
+    <script src = './controllers/home-controller.js'></script>
+    <script src = './controllers/add-controller.js'></script>
+    <script src = './controllers/insights-controller.js'></script>
+    <script src = './controllers/users-controller.js'></script>
+    <script src = './controllers/share-controller.js'></script>
+    <script src = './controllers/settings-controller.js'></script>
     <link rel="icon" 
           type="image/png" 
           href="./images/link-circle.png">
    <style type = 'text/css'>
    .url{
    	color:green;
+   }
+   .middle{
+    margin-left:25%;
+    width:50%;
    }
    body{
     padding-left:50px;
@@ -60,7 +69,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="#/">PBL Links Explorer</a>
+      <a class="navbar-brand" href="#/">PooBLe</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -72,6 +81,7 @@
         <li><a href="#/about">About</a></li>
         <li><a href="#/add">Add</a></li>
         <li><a href="#/share">Share</a></li>
+        <li><a href="#/settings">Settings</a></li>
       </ul>
 
     </div><!-- /.navbar-collapse -->

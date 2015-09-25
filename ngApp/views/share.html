@@ -14,6 +14,9 @@
 	background-color: black;
 	margin-top:10px;
 }
+.recipient-span{
+	margin-left:3px;
+}
 </style>
 <div id = 'share-title' class = 'centered'>
 	<h1>Share PBL Links</h1>
@@ -23,17 +26,27 @@
 <div id = 'share-input-area'>
 	<div class="input-group">
       <span class="input-group-addon" id="recipients-addon">Recipients</span>
-      <input id = 'recipients-input' type="text" class="form-control" placeholder="Search for recipients here" aria-describedby="recipients-addon">
+      <input id = 'recipients-input' type="text" class="form-control" placeholder="Search for recipients here" aria-describedby="recipients-addon" ng-model = 'recipientsFilter'>
     </div>
+    <div id = 'recipients-container'>
+    	<span class = 'recipient-span' ng-repeat = 'recipient in recipients' ng-click = 'removeRecipient(recipient)'>{{recipient.name}} ({{recipient.email}})</span>
+    </div>
+    <div id = 'members-container' ng-hide = 'hideMembers == true || members == null'>
+    	<button class = 'btn btn-default' ng-click = 'hideMembers=true'>Hide</button>
+    	<div ng-repeat = 'member in members | filter:recipientsFilter' ng-click = 'addRecipient(member)'>{{member.name}}</div>
+    </div>
+    <button class = 'btn btn-default' ng-show = 'hideMembers == true' ng-click = 'hideMembers = false'>Show Members</button>
 
     <div class="input-group">
       <span class="input-group-addon" id="message-addon">Message</span>
-      <input id = 'message-input' type="text" class="form-control" placeholder="Enter a short message here" aria-describedby="message-addon">
+      <input id = 'message-input' type="text" class="form-control" placeholder="Enter a short message here" aria-describedby="message-addon" ng-model = 'message'>
     </div>
 
     <div class="input-group">
       <span class="input-group-addon" id="golinks-addon">Links</span>
-      <input id = 'golinks-input' type="text" class="form-control" placeholder="Enter comma separated links here" aria-describedby="golinks-addon">
+      <input id = 'golinks-input' type="text" class="form-control" placeholder="Enter comma separated links here" aria-describedby="golinks-addon" ng-model = 'links'>
     </div>
-    <button class = 'btn btn-default' id = 'send-btn'>Send</button>
+    <button class = 'btn btn-default' id = 'send-btn' ng-click = 'sendPush()'>Send</button>
 </div>
+
+<h4 class = 'centered' id = 'pushMessage'></h4>

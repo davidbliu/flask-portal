@@ -4,8 +4,20 @@
 	width:50%;
 	margin-left:25%;
 }
+
 </style>
 <div id = 'insights-top-container' class = 'centered'>
 	<h1>Insights</h1>
-	<input type = 'text' class = 'form-control' placeholder = 'Enter golink for insights'></input>
+	<input type = 'text' class = 'form-control centered' placeholder = 'Enter golink for insights' ng-model = 'searchTerm' ng-keyup="$event.keyCode == 13 && getClicks(searchTerm)"></input>
+	<div class = 'text-muted' ng-hide = 'clicks==null'>Data from the last 1000 clicks</div>
+</div>
+<div class = 'row' ng-hide = 'clicks == null'>
+	<div class = 'col-md-6' >
+		<h2>Raw clicks</h2>
+		<div ng-repeat = 'click in clicks'>{{click.email}}:{{click.time}}:{{click.timestamp}}</div>
+	</div>
+	<div class = 'col-md-6'>
+		<h2>Aggregate metrics</h2>
+		<div ng-repeat = 'click in aggregatedClicks | orderBy:"-num_clicks"'>{{click.email}}:{{click.num_clicks}}</div>
+	</div>
 </div>

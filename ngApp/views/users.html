@@ -10,7 +10,8 @@
 	<div class = 'col-md-6'>
 		<h2>PooBLers</h2>
 		<input type = 'text' id = 'user-search-input' class = 'form-control centered' placeholder = 'Search PooBLers' ng-model='searchText'></input>
-		<table class = 'table'>
+		<div ng-show = 'members == null'><h2>Pulling data...</h2></div>
+		<table class = 'table' ng-hide = 'members == null'>
 			<thead>
 				<th></th>
 				<th>Name</th>
