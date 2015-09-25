@@ -1,5 +1,5 @@
-// ROOT_URL = 'http://testing.berkeley-pbl.com';
-ROOT_URL = 'http://localhost:3000'
+ROOT_URL = 'http://testing.berkeley-pbl.com';
+// ROOT_URL = 'http://localhost:3000'
 var token = '';
 var app = angular.module('goApp', ['ngRoute']);
 app.config(function($routeProvider) {
