@@ -15,11 +15,28 @@ app.config(function($routeProvider) {
         .when('/about', {
             templateUrl : 'views/about.html'
         })
+        .when('/add', {
+            templateUrl : 'views/add.html',
+            controller  : 'AddController'
+        })
+        .when('/share', {
+            templateUrl : 'views/share.html'
+        })
+        .when('/insights', {
+            templateUrl : 'views/insights.html',
+            controller  : 'AddController'
+        })
         .otherwise({
           'redirect_to': '/'
         });
 });
 
+app.controller('AddController', function($scope){
+  $scope.addGoLink = function(){
+    key = $scope.goKey;
+    url = $scope.goURL;
+  }
+});
 app.controller('UsersController', function($scope, $http){
   function getMembers(){
      $http.get(ROOT_URL + '/api/current_members').
@@ -99,15 +116,35 @@ app.controller('GoController', function($scope, $http) {
     		console.log(data);
     	});
 	}
+  function searchGoPost(searchTerm){
+    if(searchTerm.indexOf('#')!=-1){
+      console.log('searching for the post');
+        $http.get(ROOT_URL + '/api/get_link_post?search_term='+encodeURIComponent(searchTerm)+'&token='+getToken()).
+          success(function(data, status, headers, config){
+            if(data.content != null && data.content != ''){
+              $('#search-post-div').html(data.content);
+              $scope.searchPost = true;
+            }
+          }).
+          error(function(data, status, headers, config){
+            console.log('there was an error getting link post');
+          });
+    }
+  }
 	function searchGoLinks(searchTerm, page){
-		$http.get(ROOT_URL + '/api/search_golinks?search_term='+searchTerm+'&page=1&token='+getToken()).
+    $scope.searchPost = false;
+    $('#search-post-div').html('');
+		$http.get(ROOT_URL + '/api/search_golinks?search_term='+encodeURIComponent(searchTerm)+'&page=1&token='+getToken()).
     	success(function(data, status, headers, config){
     		$scope.golinks = data;
+        $scope.searching = true;
+        $scope.searchTerm = searchTerm;
     	}).
     	error(function(data, status, headers, config){
     		console.log('there was an error');
     		console.log(data);
     	});
+    searchGoPost(searchTerm);
 	}
     function getPopularLinks(){
       $http.get(ROOT_URL + '/api/popular_golinks?token='+getToken()).
@@ -132,12 +169,15 @@ app.controller('GoController', function($scope, $http) {
     // getGoLinks(1); // pull the first page of golinks when the page is first loaded
     getRecentGolinks();
     getTopRecent();
+
     $scope.tagCloud = getTagCloud();
     $scope.firstName= "David";
     $scope.lastName= "Liu";
     $scope.filterName = 'filter pubs';
     $scope.permissionsOptions = ['Anyone', 'Only Me', 'Only PBL', 'Only Officers', 'Only Execs'];//[{'id': 'Only Me','label': 'Only Me'},{'id':' Only PBL', 'label':'Only PBL'}];//, 'Only Officers', 'Only Execs', 'Anyone'];
     $scope.page = 1;
+
+    searchGoPost("#pooble");
     $scope.searchGoLinks = function(){
     	console.log('this was called');
     	$scope.page == 1;
@@ -204,6 +244,27 @@ app.controller('GoController', function($scope, $http) {
           console.log('failed');
         }
       });
+    };
+    $scope.deleteGoLink = function(golink){
+      var r = confirm("Are you sure you want to delete: "+golink.key);
+      if (r == true) {
+        id = golink.id;
+        $('#'+id+'-div').remove();
+        $.ajax({
+        url: ROOT_URL+'/api/delete_golink',
+        type: 'POST',
+        data: {'id': id},
+        success:function(data){
+          console.log(data);
+        },
+        error:function (xhr, textStatus, thrownError){
+          console.log('failed');
+        }
+      });
+      } else {
+        console.log('aborted');
+      }
+      
     };
 });
 

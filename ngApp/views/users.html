@@ -1,8 +1,15 @@
+<style type = 'text/css'>
+#user-search-input{
+	width:50%;
+	margin-bottom:10px;
+}
+</style>
 <h1 class = 'centered'>PooBLers</h1>
 <img src = 'http://iamattila.com/wp-content/uploads/2014/09/Spy1.png' height=100/>
 <div class = 'row'>
 	<div class = 'col-md-6'>
 		<h2>PooBLers</h2>
+		<input type = 'text' id = 'user-search-input' class = 'form-control centered' placeholder = 'Search PooBLers' ng-model='searchText'></input>
 		<table class = 'table'>
 			<thead>
 				<th></th>
@@ -12,7 +19,7 @@
 				<th>Position</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat = "member in members">
+				<tr ng-repeat = "member in members | filter:searchText " >
 					<td><img src = '{{member.gravatar_url}}' class = 'profile-img'/></td>
 					<td>{{member.name}}</td>
 					<td><a href = 'javascript:void(0);' ng-click='getContributions(member.email)'>{{member.email}}</a></td>

@@ -1,0 +1,30 @@
+<style type = 'text/css'>
+#add-input-box{
+	width:50%;
+	margin-left:25%;
+}
+#save-btn{
+	background-color: black !important;
+	margin-top:5px;
+	color:white;
+}
+#addbox{
+
+	padding:25px;
+
+}
+</style>
+<div class = 'centered'>
+<div id = 'addbox'>
+	<h3>Contribute a PBL Link</h3>
+	<div id = 'add-input-box'>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">pbl.link/</span>
+		  <input type="text" class="form-control" placeholder="enter a key here" aria-describedby="basic-addon1" ng-model = 'goKey'>
+		</div>
+		<div>Redirects to</div>
+		<div><input type = 'text' class = 'form-control' placeholder = 'enter a url here' ng-model = 'goURL'></div>
+		<button id = 'save-btn' class = 'btn btn-default' ng-click = 'addGoLink()'>Save</button>
+	</div>
+</div>
+</div>

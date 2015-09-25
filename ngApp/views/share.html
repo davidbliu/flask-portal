@@ -1,0 +1,39 @@
+<style type = 'text/css'>
+#share-input-area{
+	width:50%;
+	margin-left:25%;
+}
+#share-title{
+	margin-top:50px;
+}
+.input-group{
+	margin-top:10px;
+}
+#send-btn{
+	color:white;
+	background-color: black;
+	margin-top:10px;
+}
+</style>
+<div id = 'share-title' class = 'centered'>
+	<h1>Share PBL Links</h1>
+	<p>Sharing links will send push notifications with the resources you want to share</p>
+</div>
+
+<div id = 'share-input-area'>
+	<div class="input-group">
+      <span class="input-group-addon" id="recipients-addon">Recipients</span>
+      <input id = 'recipients-input' type="text" class="form-control" placeholder="Search for recipients here" aria-describedby="recipients-addon">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon" id="message-addon">Message</span>
+      <input id = 'message-input' type="text" class="form-control" placeholder="Enter a short message here" aria-describedby="message-addon">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon" id="golinks-addon">Links</span>
+      <input id = 'golinks-input' type="text" class="form-control" placeholder="Enter comma separated links here" aria-describedby="golinks-addon">
+    </div>
+    <button class = 'btn btn-default' id = 'send-btn'>Send</button>
+</div>

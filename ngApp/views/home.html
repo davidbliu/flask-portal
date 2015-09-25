@@ -19,11 +19,14 @@
   width:100%;
   text-align: center;
 }
+#search-input-div{
+  margin-bottom:50px;
+}
 #search-input{
   margin-left:25%;
   width:50%;
   text-align:center;
-  margin-bottom:50px;
+  
 }
 #homepage-container{
   margin-top:50px;
@@ -61,7 +64,9 @@
 </style>
 <div id = 'homepage-container' class = 'centered row'>
   <h1>PooBLe</h1>
-  	<div><input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input></div>
+  	<div id = 'search-input-div'><input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input>
+      <div class = 'text-muted'>Displaying {{golinks.length}} results</div>
+    </div>
     <div id = 'search-buttons'>
 
     </div>
@@ -70,7 +75,8 @@
   <div class = 'row'>
     <div class = 'col-md-6'>
       <div class = 'golinks-container'>
-    		<div ng-repeat='golink in golinks' class = 'golink-div'>
+    		<div ng-repeat='golink in golinks' class = 'golink-div' >
+          <div id = '{{golink.id}}-div'>
           <div class = 'show-content' ng-hide = 'editing'>
             <div>
               <div class = 'pull-right'><img class = 'type-image' ng-src = './images/{{ image_hash[golink.type] }}' height=35/></div>
@@ -119,11 +125,12 @@
             
           </div>
             
-            <div><a href = 'javascript:void(0);' ng-click= 'saveGoLink(golink); editing=false'>Save</a> | <a href = 'javascript:void(0);' ng-click='editing = false'>Cancel</a> | <a href = 'javascript:void(0)'>Delete</a>
+            <div><a href = 'javascript:void(0);' ng-click= 'saveGoLink(golink); editing=false'>Save</a> | <a href = 'javascript:void(0);' ng-click='editing = false'>Cancel</a> | <a href = 'javascript:void(0)' ng-click='deleteGoLink(golink)'>Delete</a>
             </div>
           </div>
           <!-- end of editing -->
-            
+          </div>
+          <!-- end of id div -->
           </div>
           <!-- end of golink -->
         </div>
@@ -132,12 +139,25 @@
      <!-- end of col -->
 
     <div class = 'col-md-6'>
+      <div class = 'card' ng-show = 'searchPost'>
+        <div id = 'search-post-div'></div>
+      </div>
+      <div class = 'card' ng-show = 'searching'>
+        <h2>Search Results (Left)</h2>
+        <div>These are search results for <div class = 'label label-default'>{{searchTerm}}</div></div>
+
+        <div class = 'text-muted'>Scroll around on the left to see more info on each result</div>
+        <ul>
+        <li ng-repeat='golink in golinks | orderBy:"-num_clicks"'><a href = '{{golink.url}}'>{{golink.key}}</a>: {{golink.num_clicks}}</li>
+        </ul> 
+      </div>
       <div class = 'card'>
-        <h2>Trending this week</h2>
+        <h2>Trending</h2>
         <ul>
           <li ng-repeat='result in topRecent | orderBy : "-num_clicks" | limitTo:25'>{{result.num_clicks}}: <a href = '{{result.golink.url}}'>{{result.golink.key}}</a></li>
         </ul>
       </div>
+      
       <!-- <div class = 'card'>
         <h2>Tag Cloud</h2>
         <div ng-repeat='tag in tagCloud' class = 'tag-cloud-label'>{{tag.name}}</div>
@@ -145,7 +165,7 @@
       <div class = 'card'>
         <h2>Most Popular Links</h2>
         <div ng-repeat = 'golink in popularLinks | limitTo:10'>
-          <div><span class = 'blue'>{{golink.key}}</span> ({{golink.num_clicks}})</div>
+          <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a> ({{golink.num_clicks}})</div>
           <div class = 'green'>{{golink.url | limitTo: 70}}</div>
         </div>
       </div>
