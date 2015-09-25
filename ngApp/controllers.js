@@ -8,30 +8,41 @@ app.config(function($routeProvider) {
             templateUrl : 'views/home.html',
             controller  : 'GoController'
         })
-        .when('/analytics', {
-            templateUrl : 'views/analytics.html',
-            controller  : 'AnalyticsController'
-        })
         .when('/users', {
             templateUrl : 'views/users.html',
             controller  : 'UsersController'
+        })
+        .when('/about', {
+            templateUrl : 'views/about.html'
         })
         .otherwise({
           'redirect_to': '/'
         });
 });
-app.controller("TokenController", function($scope){
-  $scope.token = 'your token here';
-  $scope.setToken=function(){
-    token = $scope.token;
-  } 
-});
 
 app.controller('UsersController', function($scope, $http){
-  function getUsers(){
-     $http.get(ROOT_URL + '/api/main_users').
+  function getMembers(){
+     $http.get(ROOT_URL + '/api/current_members').
       success(function(data, status, headers, config){
-        $scope.users = data;
+        $scope.members = data;
+      }).
+      error(function(data, status, headers, config){
+        console.log('there was an error');
+      });
+  }
+  function getContributors(){
+     $http.get(ROOT_URL + '/api/contributors').
+      success(function(data, status, headers, config){
+        $scope.contributors = data;
+      }).
+      error(function(data, status, headers, config){
+        console.log('there was an error');
+      });
+  }
+  function getContributions(email){
+    $http.get(ROOT_URL + '/api/contributions?email='+encodeURIComponent(email)+'&token='+getToken()).
+      success(function(data, status, headers, config){
+        $scope.contributions = data;
       }).
       error(function(data, status, headers, config){
         console.log('there was an error');
@@ -46,14 +57,19 @@ app.controller('UsersController', function($scope, $http){
         console.log('there was an error fetching user clicks');
       });
   }
-  getUsers();
+  getContributors();
   $scope.title = 'Users Page'
-  $scope.users = [];
   $scope.userClicks = [];
+  getMembers();
   $scope.pullUserClicks = function(email){
     console.log(email);
     console.log('pulling clicks');
     getUserClicks(encodeURIComponent(email));
+  };
+  $scope.getContributions = function(email){
+    $scope.contributor = email;
+    $scope.showContributions=true;
+    getContributions(email);
   };
 });
 
@@ -73,11 +89,10 @@ app.controller('AnalyticsController', function($scope, $http){
 });
 
 app.controller('GoController', function($scope, $http) {
-	function getGoLinks(page){
-		 $http.get(ROOT_URL + '/api/all_golinks?page='+page.toString()+'&token='+getToken()).
+	function getRecentGolinks(){
+		 $http.get(ROOT_URL + '/api/recent_golinks?&token='+getToken()).
     	success(function(data, status, headers, config){
     		$scope.golinks = data;
-    		$scope.numLinks = data.length;
     	}).
     	error(function(data, status, headers, config){
     		console.log('there was an error');
@@ -88,7 +103,6 @@ app.controller('GoController', function($scope, $http) {
 		$http.get(ROOT_URL + '/api/search_golinks?search_term='+searchTerm+'&page=1&token='+getToken()).
     	success(function(data, status, headers, config){
     		$scope.golinks = data;
-    		$scope.numLinks = data.length;
     	}).
     	error(function(data, status, headers, config){
     		console.log('there was an error');
@@ -105,8 +119,20 @@ app.controller('GoController', function($scope, $http) {
       });
 
     }
+    function getTopRecent(){
+      $http.get(ROOT_URL + '/api/top_recent?token='+getToken()).
+      success(function(data, status, headers, config){
+        $scope.topRecent = data;
+      }).
+      error(function(data, status, headers, config){
+        console.log('top recent error');
+      });
+    };  
     getPopularLinks();
-    getGoLinks(1); // pull the first page of golinks when the page is first loaded
+    // getGoLinks(1); // pull the first page of golinks when the page is first loaded
+    getRecentGolinks();
+    getTopRecent();
+    $scope.tagCloud = getTagCloud();
     $scope.firstName= "David";
     $scope.lastName= "Liu";
     $scope.filterName = 'filter pubs';
@@ -117,15 +143,10 @@ app.controller('GoController', function($scope, $http) {
     	$scope.page == 1;
     	searchGoLinks($('#search-input').val(), 1);
     };
-    $scope.nextPage = function() {
-    	$scope.page+=1
-    	getGoLinks($scope.page);
-    };
     $scope.getClicks = function(){
       $http.get(ROOT_URL + '/api/recent_clicks'). //?search_term='+searchTerm+'&page=1&token='+getToken()).
       success(function(data, status, headers, config){
         $scope.golinks = data;
-        $scope.numLinks = data.length;
       }).
       error(function(data, status, headers, config){
         console.log('there was an error');
@@ -185,6 +206,12 @@ app.controller('GoController', function($scope, $http) {
       });
     };
 });
+
+function getTagCloud(){
+  tagCloud = [];
+  tagCloud.push({'name': 'WD'})
+  return tagCloud;
+}
 
 function getIconImage(type){
     

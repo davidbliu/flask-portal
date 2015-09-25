@@ -32,6 +32,9 @@
   opacity:0.5;
   margin-left:2px;
 }
+.tag-cloud-label{
+  font-size:18px;
+}
 .side-card{
   border:1px solid rgba(0,0,0,0.1);
   padding:15px;
@@ -44,6 +47,9 @@
 .type-image{
   margin-top:10px;
 }
+.red-span{
+  color:red;
+}
 </style>
 <style type = 'text/css'>
 .key-input{
@@ -54,7 +60,7 @@
 }
 </style>
 <div id = 'homepage-container' class = 'centered row'>
-
+  <h1>PooBLe</h1>
   	<div><input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search PBL Links' ng-keyup="$event.keyCode == 13 && searchGoLinks()"></input></div>
     <div id = 'search-buttons'>
 
@@ -72,7 +78,11 @@
                 <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a></div>
                 <div class = 'green'>{{golink.url | limitTo:70}}</div>
                 <div class = ''>{{golink.description}}</div>
-                <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: {{golink.member_email}}, {{golink.num_clicks}} clicks, tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div></div>
+                <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: <a href = 'javascript:void(0)' class= 'member-link'>{{golink.member_email}}</a>, {{golink.num_clicks}} clicks
+                </div>
+                <div>
+                  tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div>
+                </div>
                 <div><a href = 'javascript:void(0)' ng-click='editing = true'>Edit</a></div>
               </div>
             </div>
@@ -97,7 +107,7 @@
 
             <div class="input-group">
               <span class="input-group-addon" id="key-addon-{{golink.id}}">Tags</span>
-              <input id = '{{golink.id}}-tags-input' type="text" class="form-control" placeholder="Description" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.tags.join(",")}}'>
+              <input id = '{{golink.id}}-tags-input' type="text" class="form-control" placeholder="Tags (comma,separated)" aria-describedby="key-addon-{{golink.id}}" value = '{{golink.tags.join(",")}}'>
             </div>
 
             <div class = 'input-group'>
@@ -122,20 +132,24 @@
      <!-- end of col -->
 
     <div class = 'col-md-6'>
-      <div class = 'side-card'>
-        <h2>Trending Links</h2>
-
+      <div class = 'card'>
+        <h2>Trending this week</h2>
+        <ul>
+          <li ng-repeat='result in topRecent | orderBy : "-num_clicks" | limitTo:25'>{{result.num_clicks}}: <a href = '{{result.golink.url}}'>{{result.golink.key}}</a></li>
+        </ul>
+      </div>
+      <!-- <div class = 'card'>
+        <h2>Tag Cloud</h2>
+        <div ng-repeat='tag in tagCloud' class = 'tag-cloud-label'>{{tag.name}}</div>
+      </div> -->
+      <div class = 'card'>
         <h2>Most Popular Links</h2>
         <div ng-repeat = 'golink in popularLinks | limitTo:10'>
           <div><span class = 'blue'>{{golink.key}}</span> ({{golink.num_clicks}})</div>
           <div class = 'green'>{{golink.url | limitTo: 70}}</div>
         </div>
       </div>
-      <div class = 'side-card'>
-        <h2>Tag Cloud</h2>
-      </div>
-      <div class = 'side-card'>
-        <h2>Week 2 Resources</h2>
-      </div>
+      
+      
     </div>
 </div>

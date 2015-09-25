@@ -1,28 +1,39 @@
-<h1>{{title}}</h1>
+<h1 class = 'centered'>PooBLers</h1>
 <img src = 'http://iamattila.com/wp-content/uploads/2014/09/Spy1.png' height=100/>
 <div class = 'row'>
 	<div class = 'col-md-6'>
-		<h2>Recent Clicks</h2>
-		<table class = 'table-condensed table'>
+		<h2>PooBLers</h2>
+		<table class = 'table'>
 			<thead>
-				<th>email</th>
-				<th>num clicks</th>
-				<th>links added</th>
+				<th></th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Committee</th>
+				<th>Position</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat = "user in users | orderBy:'-num_clicks'">
-					<td><a href = 'javascript:void(0)' ng-click='pullUserClicks(user.email)'>{{user.email}}</a></td>
-					<td>{{user.num_clicks}}</td>
-					<td>{{user.num_clicks}}</td>
+				<tr ng-repeat = "member in members">
+					<td><img src = '{{member.gravatar_url}}' class = 'profile-img'/></td>
+					<td>{{member.name}}</td>
+					<td><a href = 'javascript:void(0);' ng-click='getContributions(member.email)'>{{member.email}}</a></td>
+					<td>{{member.committee}}</td>
+					<td>{{member.position}}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 
 	<div class = 'col-md-6'>
-		<h2>User Clicks</h2>
-		<div ng-repeat='click in userClicks'>
-			<a href = '#'>{{click.attributes.key}}</a> ({{click.attributes.time.iso}})
+		<div class = 'card' ng-show='showContributions'>
+			<h2>{{contributor}}'s Contributions</h2>
+			<div ng-repeat='contribution in contributions | orderBy:"-num_clicks"'>
+				{{contribution.num_clicks}}: <a href = '{{contribution.url}}'>{{contribution.key}}</a>
+			</div>
 		</div>
+		<div class = 'card'>
+			<h2>Top Contributors</h2>
+			<div ng-repeat ='contributor in contributors |orderBy:"-num_added"'><a href = 'javascript:void(0);' ng-click='getContributions(contributor.email)'> {{contributor.email}}: {{contributor.num_added}}</div>
+		</div>
+		
 	</div>
 </div>
