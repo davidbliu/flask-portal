@@ -1,6 +1,9 @@
-ROOT_URL = 'http://testing.berkeley-pbl.com';
-// ROOT_URL = 'http://localhost:3000'
-var token = '';
+// ROOT_URL = 'http://testing.berkeley-pbl.com';
+ROOT_URL = 'http://localhost:3000'
+// var token = '';
+var token = getParameterByName('token');
+console.log(token);
+console.log('that was the token');
 var email = 'davidbliu@gmail.com';
 var app = angular.module('goApp', ['ngRoute']);
 app.config(function($routeProvider) {
@@ -36,6 +39,14 @@ app.config(function($routeProvider) {
           'redirect_to': '/'
         });
 });
+
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 function getTagCloud(){
   tagCloud = [];

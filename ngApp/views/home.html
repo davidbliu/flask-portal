@@ -2,6 +2,9 @@
 .golink-td{
   width:25%;
 }
+.permissions-span{
+  text-decoration: underline;
+}
 .blue{
   color:#1A0DAB;
   font-size:18px;
@@ -32,8 +35,8 @@
   margin-top:50px;
 }
 .tag-label{
-  opacity:0.5;
-  margin-left:2px;
+  margin-left:5px;
+  text-decoration: underline;
 }
 .tag-cloud-label{
   font-size:18px;
@@ -85,10 +88,10 @@
                 <div><a class = 'blue' href = '{{golink.url}}'>{{golink.key}}</a></div>
                 <div class = 'green'>{{golink.url | limitTo:70}}</div>
                 <div class = ''>{{golink.description}}</div>
-                <div class = 'text-muted'>Permissions: "{{golink.permissions}}", Added by: <a href = 'javascript:void(0)' class= 'member-link'>{{golink.member_email}}</a>, {{golink.num_clicks}} clicks
+                <div class = 'text-muted'>Added by: <a href = 'javascript:void(0)' class= 'member-link'>{{golink.member_email}}</a>, Permissions: <span class = 'permissions-span'>{{golink.permissions}}</span>, {{golink.num_clicks}} clicks
                 </div>
                 <div>
-                  tags: <div class = 'label label-primary tag-label' ng-repeat = 'tag in golink.tags'>{{tag}}</div>
+                  tags: <a href = 'javascript:void(0)' class = 'tag-label' ng-repeat = 'tag in golink.tags' ng-click = 'searchTag(tag)'>{{tag}}</a>
                 </div>
                 <div><a href = 'javascript:void(0)' ng-click='editing = true'>Edit</a></div>
               </div>

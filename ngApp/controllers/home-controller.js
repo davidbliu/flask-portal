@@ -86,6 +86,10 @@ app.controller('HomeController', function($scope, $http) {
         console.log(data);
       });
     }
+    $scope.searchTag = function(tag){
+      searchGoLinks('#'+tag);
+      $('#search-input').val('#'+tag);
+    }
     $scope.getPopular = function(){
       getPopularLink();
     };
