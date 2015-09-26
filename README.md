@@ -13,11 +13,9 @@ we will have some other app (maybe this flask app, maybe something else) serving
 
 ## what's in this repo
 
-* /ngApp : sample angular app for PBL Links Explorer
 * app.py : main flask appp
 * seeds.py : data, gets data from parse
 
-# Running the /ngApp
-start a dummy python server: "python -m SimpleHTTPServer 8000"
+## EDIT: Removed ngApp from the repo
+ngApp has been moved to pooble
 
-navigate to localhost:8000 in the browser, click the mainpage.html
