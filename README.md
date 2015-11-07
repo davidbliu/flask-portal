@@ -3,6 +3,13 @@
 next generation of the portal
 
 
+## How to get started
+
+- clone this repo
+- add config.py from http://pbl.link/flask-drive to the root directory. this has app ids and keys and whatnot
+- start working on api routes (goal of today is to finish apiserver)
+  - reading over resources may help
+  - see `app/models/*`
 
 ## installing
 
@@ -18,8 +25,6 @@ how to navigate this repo
 
 how to use parse rest api
 - https://parse.com/docs/rest/guide
-
-fulltext search
 
 oauth via google
 - https://github.com/mitsuhiko/flask-oauth/blob/master/example/google.py
