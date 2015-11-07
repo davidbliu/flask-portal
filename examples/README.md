@@ -7,11 +7,11 @@ this directory contains a bunch of examples. look at them to get started
 
 the formal documentation is at pbl.link/parse-rest-api
 
-'''python
+```python
 print 'hi'
 params = {}
 
-'''
+```
 
 ## authentication
 
