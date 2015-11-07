@@ -3,9 +3,18 @@
 
 this directory contains a bunch of examples. look at them to get started
 
+## Add a new route
+
+edit `app/__init__.py`
+
+```python
+@app.route('/name/of/route')
+def method_name():
+  pass
+```
 ## Parse rest api
 
-the formal documentation is at pbl.link/parse-rest-api
+the formal documentation is at http://pbl.link/parse-rest-api
 
 you can make parse requests using standard python rest calls
 ```python

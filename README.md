@@ -10,7 +10,6 @@ this is a non comprehensive list of dependencies
 most are listed in install.sh
 
 - oauth
-- parsepy
 
 ## resources
 
@@ -30,6 +29,7 @@ oauth via google
 ### finish models
 
 this app is meant to be an api server. finish writing code to serve apis for
+
 - members
 - tabling
 - events
@@ -37,6 +37,33 @@ this app is meant to be an api server. finish writing code to serve apis for
 - points
 - golinks
 - blog posts
+
+#### Members
+```python
+def get_member(email):
+  # return member object corresponding to this email (primary key)
+
+def get_members(params):
+  # if no params get current members
+  # params can be used to filter results
+    # ex: name like %avid%
+
+def update_member(email, data):
+  # update member data in parse
+
+```
+
+#### Tabling
+```python
+def get_tabling_schedule(params):
+  # default: return current tabling schedule
+
+def get_tabling_slot(email):
+  # return this members tabling slot
+```
+
+#### Points
+
 
 ### caching
 
