@@ -1,9 +1,9 @@
 from parse_rest.datatypes import Object
 from parse_rest.connection import register
 import sys
-application_id = 'XIpP60GkEQF4bQtKFOcceguywNhzOs3Lpsw1H17Z'
-client_key = '7otfMUAoJ7v5EjhLNMiwqKbSRUi9UOA7xnZp6zOO'
-register(application_id, client_key)
+import config 
+
+register(config.PARSE_APP_ID, config.PARSE_REST_API_KEY)
 
 """ Data @ WD Models """
 class ParseMember(Object):
