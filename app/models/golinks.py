@@ -5,6 +5,14 @@ def test():
     r = parse_driver.make_parse_request('GET', '/1/classes/ParseMember')
     print r['results']
 
+def create_golink(key, url, member_email, description = '', tags = [], permissions = 'Anyone'):
+    golink = {}
+    golink['key'] = key
+    golink['url'] = url
+    golink['tags'] = tags
+    golink['permissions'] = permissions
+    golink['member_email'] = member_email
+    results = parse_driver.make_parse_post_request('/1/classes/ParseGoLink', golink)
 
 def get_with_tags(tags):
     params = {}
