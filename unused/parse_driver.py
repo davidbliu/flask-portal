@@ -17,6 +17,20 @@ def make_parse_request(req_type, url, params = {}):
     result = json.loads(connection.getresponse().read())
     return result
 
+def make_parse_post_request(url, params = {}):
+    connection.request(
+        'POST',
+        url,
+        json.dumps(params),
+        {
+            "X-Parse-Application-Id": config.PARSE_APP_ID,
+            "X-Parse-REST-API-Key": config.PARSE_REST_API_KEY,
+            "Content-Type": "application/json"
+        }
+    )
+    result = json.loads(connection.getresponse().read())
+    return result
+
 def test():
     where = {}
     where['email'] = {'$in': ['davidbliu@gmail.com', 'alice.sun94@gmail.com']}

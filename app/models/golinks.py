@@ -13,6 +13,7 @@ def create_golink(key, url, member_email, description = '', tags = [], permissio
     golink['permissions'] = permissions
     golink['member_email'] = member_email
     results = parse_driver.make_parse_post_request('/1/classes/ParseGoLink', golink)
+    return results
 
 def get_with_tags(tags):
     params = {}

@@ -43,9 +43,22 @@ def cookie():
 
 """ GoLinks """
 
-@app.route('/go')
-def go():
-    return redirect('http://www.google.com', code = 302)
+@app.route('/go_links', methods=['GET', 'POST'])
+def go_links():
+    if request.method == 'POST':
+      key = request.form.get('key')
+      url = request.form.get('url')
+      member_email = request.form.get('member_email')
+      description = request.form.get('description')
+      tags = request.form.get('tags')
+      permissions = request.form.get('permissions')
+
+      response = GoLinks.create_golink(key, url, member_email, description, tags, permissions)
+      return Response(json.dumps(response),  mimetype='application/json')
+
+    elif request.method == 'GET':
+      golinks = GoLinks.recent_golinks()
+      return Response(json.dumps(golinks),  mimetype='application/json')
 
 """ Google Oauth """
 # You must configure these 3 values from Google APIs console
