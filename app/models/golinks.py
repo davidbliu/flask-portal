@@ -5,3 +5,7 @@ def test():
     print r['results']
 
 
+def recent_golinks():
+    params = {}
+    results = parse_driver.make_parse_request('GET', '/1/classes/ParseGoLink', params)
+    return results['results']
