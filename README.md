@@ -11,6 +11,9 @@ next generation of the portal
   - reading over resources may help
   - see `app/models/*`
 
+next step is to work on frontend
+- http://pbl.link/pbl-front-end
+
 ## installing
 
 this is a non comprehensive list of dependencies
