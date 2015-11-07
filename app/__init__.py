@@ -3,6 +3,7 @@ from flask import Flask
 from flask import Flask, request, jsonify, render_template
 from flask import redirect, url_for, session
 from flask_oauth import OAuth
+from flask import Response
 # set cookies
 from flask import request
 from flask import make_response
@@ -28,6 +29,13 @@ def test():
     result['golinks'] = golinks
     # return jsonify(**result)
     return json.dumps(golinks)
+
+@app.route('/test2')
+def test2():
+    import models.members as Mem
+    members = Mem.all_members()
+    return Response(json.dumps(members),  mimetype='application/json')
+
 
 @app.route('/cookie')
 def cookie():
