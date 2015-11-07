@@ -46,14 +46,10 @@ def cookie():
 @app.route('/go_links', methods=['GET', 'POST'])
 def go_links():
     if request.method == 'POST':
-      key = request.form.get('key')
-      url = request.form.get('url')
-      member_email = request.form.get('member_email')
-      description = request.form.get('description')
-      tags = request.form.get('tags')
-      permissions = request.form.get('permissions')
-
-      response = GoLinks.create_golink(key, url, member_email, description, tags, permissions)
+      data = json.loads(request.data)
+      
+      response = GoLinks.create_golink(data["key"], data["url"], data["member_email"],
+        data["description"], data["tags"], data["permissions"])
       return Response(json.dumps(response),  mimetype='application/json')
 
     elif request.method == 'GET':
