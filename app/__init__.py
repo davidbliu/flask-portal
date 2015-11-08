@@ -1,6 +1,7 @@
 import config
 from flask import Flask
 from flask import Flask, request, jsonify, render_template
+from flask.ext.cors import CORS
 from flask import redirect, url_for, session
 from flask_oauth import OAuth
 from flask import Response
@@ -10,12 +11,14 @@ from flask import make_response
 
 # import models 
 import models.golinks as GoLinks
-
+import models.members as Members
+import models.tabling as Tabling
 import sys
 import json
 
 app = Flask(__name__)
 app.secret_key = 'aslkdfjlsfj'
+CORS(app)
 
 
 @app.route('/')
@@ -40,7 +43,19 @@ def test2():
 @app.route('/cookie')
 def cookie():
     return request.cookies.get('email')
+""" Members """
+@app.route('/current_members')
+def current_members():
+    members = Members.current_members()
+    return Response(json.dumps(members), mimetype='application/json')
 
+""" Tabling """
+@app.route('/tabling_slots')
+def tabling_slots():
+    tabling_slots = Tabling.get_tabling_slots()
+    return Response(json.dumps(tabling_slots), mimetype = 'application/json')
+
+""" Points """
 """ GoLinks """
 
 @app.route('/go/<key>')

@@ -1,12 +1,22 @@
 import app.models.golinks as gl
 import app.test as t
 import app.models.members as mem
+import app.models.tabling as Tabling
 import app.drivers.redis_driver as redis
 def test_gl():
     golinks = gl.recent_golinks()
     print [x.url for x in golinks]
 
-test_gl()
-print redis.get('alskfjls')
-print 'recent golinks:'
-print redis.get('recent_golinks')
+def test_members():
+    members = mem.get_committee_members('HT')
+    print [x['name'] for x in members]
+
+def test_tabling():
+    ts = Tabling.get_tabling_slots()
+    print ts
+# test_gl()
+# print redis.get('alskfjls')
+# print 'recent golinks:'
+# print redis.get('recent_golinks')
+
+test_tabling()

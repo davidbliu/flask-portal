@@ -14,3 +14,6 @@ sudo pip install Flask-Cache
 
 # Redis
 sudo pip install redis
+
+# CORS
+sudo pip install -U flask-cors
