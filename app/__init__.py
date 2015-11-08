@@ -43,9 +43,19 @@ def cookie():
 
 """ GoLinks """
 
-@app.route('/go')
-def go():
-    return redirect('http://www.google.com', code = 302)
+@app.route('/go/<key>')
+def go(key):
+    golinks = GoLinks.get_with_key(key)
+    if len(golinks) > 0:
+        return redirect(golinks[0]['url'])
+    else:
+        return 'that key doesnt exist'
+
+@app.route('/recent_golinks')
+def recent_golinks():
+    golinks = GoLinks.recent_golinks()
+    golinks = [x.to_json() for x in golinks]
+    return Response(json.dumps(golinks), mimetype = 'application/json')
 
 """ Google Oauth """
 # You must configure these 3 values from Google APIs console

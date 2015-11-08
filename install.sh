@@ -9,4 +9,8 @@ sudo pip install Flask-Elasticsearch
 # Oauth
 sudo pip install Flask-OAuth
 
+# Caching
+sudo pip install Flask-Cache
 
+# Redis
+sudo pip install redis

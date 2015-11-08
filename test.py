@@ -1,17 +1,12 @@
 import app.models.golinks as gl
 import app.test as t
 import app.models.members as mem
+import app.drivers.redis_driver as redis
+def test_gl():
+    golinks = gl.recent_golinks()
+    print [x.url for x in golinks]
 
-golinks = gl.get_with_tags(['wd', 'articles'])
-golinks = [x['key'] for x in golinks]
-for k in golinks:
-    print k
-
-
-# print 'making golink'
-# gl.create_golink('test-flask-golink', 'http://www.google.com', 'davidbliu@gmail.com')
-
-print 'members'
-names =  [x['name'] for x in mem.all_members()]
-print names
-print len(names)
+test_gl()
+print redis.get('alskfjls')
+print 'recent golinks:'
+print redis.get('recent_golinks')
