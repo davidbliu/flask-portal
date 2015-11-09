@@ -1,9 +1,13 @@
 import config
 import json, httplib, urllib
-connection = httplib.HTTPSConnection('api.parse.com', 443)
-connection.connect()
+
+def get_connection():
+    con = httplib.HTTPSConnection('api.parse.com', 443)
+    con.connect()
+    return con
 
 def make_parse_request(req_type, url, params = {}):
+    connection = get_connection()
     params = urllib.urlencode(params)
     connection.request(
         req_type, 
@@ -18,7 +22,7 @@ def make_parse_request(req_type, url, params = {}):
     return result
 
 def make_parse_post_request(url, obj):
-    
+    connection = get_connection()
     connection.request(
         'POST', 
         url,

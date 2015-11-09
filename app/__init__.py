@@ -13,6 +13,9 @@ from flask import make_response
 import models.golinks as GoLinks
 import models.members as Members
 import models.tabling as Tabling
+import models.points as Points
+import models.blog as Blog
+
 import sys
 import json
 
@@ -43,19 +46,41 @@ def test2():
 @app.route('/cookie')
 def cookie():
     return request.cookies.get('email')
+
 """ Members """
 @app.route('/current_members')
 def current_members():
     members = Members.current_members()
     return Response(json.dumps(members), mimetype='application/json')
 
+@app.route('/member_email_hash')
+def member_email_hash():
+    h = Members.member_email_hash()
+    return Response(json.dumps(h), mimetype = 'application/json')
+
 """ Tabling """
 @app.route('/tabling_slots')
 def tabling_slots():
     tabling_slots = Tabling.get_tabling_slots()
+    for x in tabling_slots:
+        x['member_emails']=x['member_emails'].split(',')
     return Response(json.dumps(tabling_slots), mimetype = 'application/json')
 
 """ Points """
+@app.route('/get_member_points')
+def get_member_points():
+    email = request.args.get('email')
+    return Response(json.dumps(Points.get_member_points(email)), mimetype='application/json')
+
+@app.route('/get_all_points')
+def get_all_points():
+    return 'not implemented yet'
+
+""" Blog """
+@app.route('/all_blogposts')
+def all_blogposts():
+    posts = Blog.get_all_posts()
+    return Response(json.dumps(posts), mimetype='application/json')
 """ GoLinks """
 
 @app.route('/go/<key>')

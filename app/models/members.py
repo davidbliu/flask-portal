@@ -12,7 +12,10 @@ import sys
         # self.committee = obj.get('committee')
 
 def member_email_hash():
-    pass
+    params = {'limit':sys.maxint}
+    result =  parse_driver.make_parse_request('GET', '/1/classes/ParseMember', params)
+    members = result['results']
+    return dict((x['email'], x) for x in members if 'email' in x.keys())
 
 def current_members():
     params = {}
