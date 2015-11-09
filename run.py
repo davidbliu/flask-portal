@@ -1,19 +1,8 @@
 import config
-from flask import Flask
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,redirect, url_for, session, Response, make_response
 from flask.ext.cors import CORS
-from flask import redirect, url_for, session
 from flask_oauth import OAuth
-from flask import Response
-
-# set cookies
-from flask import request
-from flask import make_response
-
-# import models 
-import sys
-import json
-
+import sys,json
 import parse_driver
 
 app = Flask(__name__)
