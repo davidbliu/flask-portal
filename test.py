@@ -7,8 +7,10 @@ import app.models.blog as Blog
 
 import app.drivers.redis_driver as redis
 def test_gl():
-    golinks = gl.recent_golinks()
-    print [x.url for x in golinks]
+    # golinks = gl.recent_golinks()
+    # print [x.url for x in golinks]
+    search = gl.search_golinks('ht')
+    print search
 
 def test_members():
     members = mem.get_committee_members('HT')
@@ -37,4 +39,4 @@ def test_blog():
 # print 'recent golinks:'
 # print redis.get('recent_golinks')
 
-test_blog()
+test_gl()

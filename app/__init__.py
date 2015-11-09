@@ -81,6 +81,7 @@ def get_all_points():
 def all_blogposts():
     posts = Blog.get_all_posts()
     return Response(json.dumps(posts), mimetype='application/json')
+
 """ GoLinks """
 
 @app.route('/go/<key>')
@@ -91,10 +92,21 @@ def go(key):
     else:
         return 'that key doesnt exist'
 
+@app.route('/create_golink',methods=['POST'])
+def create_golink():
+    GoLinks.create_golink(request.get_json())
+    return 'ok'
+
 @app.route('/recent_golinks')
 def recent_golinks():
-    golinks = GoLinks.recent_golinks()
-    golinks = [x.to_json() for x in golinks]
+    page = int(request.args.get('page', '0'))
+    golinks = GoLinks.recent_golinks(page)
+    return Response(json.dumps(golinks), mimetype = 'application/json')
+
+@app.route('/search_golinks')
+def search_golinks():
+    searchTerm = request.args.get('searchTerm')
+    golinks = GoLinks.search_golinks(searchTerm)
     return Response(json.dumps(golinks), mimetype = 'application/json')
 
 """ Google Oauth """
