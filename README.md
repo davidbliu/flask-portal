@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [PBL Portal: Flask Edition](#pbl-portal-flask-edition)
+  - [How to get started](#how-to-get-started)
+  - [installing](#installing)
+  - [resources](#resources)
+  - [TODO](#todo)
+    - [finish models](#finish-models)
+      - [Members](#members)
+      - [Tabling](#tabling)
+      - [Points](#points)
+    - [caching](#caching)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # PBL Portal: Flask Edition
 
 next generation of the portal
