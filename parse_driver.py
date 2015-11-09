@@ -6,11 +6,11 @@ def get_connection():
     con.connect()
     return con
 
-def make_parse_request(req_type, url, params = {}):
+def make_parse_get_request(url, params = {}):
     connection = get_connection()
     params = urllib.urlencode(params)
     connection.request(
-        req_type, 
+        'GET', 
         url+'?%s' % params, 
         '', 
         {

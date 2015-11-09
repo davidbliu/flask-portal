@@ -3,4 +3,5 @@
 config.py
 *.rdb
 unused
+test.py
 
