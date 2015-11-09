@@ -21,6 +21,64 @@ You need an authentication token to use the APIs. These can be obtained at http:
 Append the api token to each api request. ex: `/some_route?token=<<YOUR TOKEN HERE>>`
 
 # Routes
+
+## Members
+
+Routes: 
+- `/current_members`
+- `/member_email_hash`
+
+
+
+```python
+# members are dicts that look like
+{
+  'name': 'David Liu',
+  'email': 'davidbliu@gmail.com',
+  'position': 'chair',
+  'phone': '7142991786',
+  'major': 'EECS',
+  'committee': 'HT'
+}
+# return list of current members (dictionaries like above)
+/current_members
+# return dictionary, keys are emails and values are members (dictionaries)
+/member_email_hash
+```
+## Points
+Routes: 
+- `/all_points`
+- `/get_member_points`
+
+```python
+# an event looks like this
+{
+  'name': '[PD] Alumni Speaker Panel'
+  'google_id': 47rmm863s6c0v13qphr705jv50'
+  'semester_name': 'Fall 2015',
+  'points': 10,
+  'location': '126 Barrows',
+  'start_time': '2015-09-04T02:00:00Z'
+  'end_time': '2015-09-04T05:00:00Z',
+  'description': 'Come hear PBL alumni talk about their experience in PBL...'
+}
+
+# get_member_points returns a members points (int) and attendance (list of events)
+/get_member_points
+# result looks like:
+{
+  'points': 121,
+  'attendance': [
+    { <<event1>>},
+    { <<event2>>},
+    ...
+  ]
+}
+
+# all points returns a list of point dictionaries like above
+/all_points  
+```
+
 ## PBL Links
 Routes:
 - `/go/<<key>>`
@@ -46,27 +104,4 @@ Routes:
 # expects searchTerm url parameter (?searchTerm=<<something>>)
 /search_golinks
 
-```
-## Members
-
-Routes: 
-- `/current_members`
-- `/member_email_hash`
-
-
-
-```python
-# members are dicts that look like
-{
-  'name': 'David Liu',
-  'email': 'davidbliu@gmail.com',
-  'position': 'chair',
-  'phone': '7142991786',
-  'major': 'EECS',
-  'committee': 'HT'
-}
-# return list of current members (dictionaries like above)
-/current_members
-# return dictionary, keys are emails and values are members (dictionaries)
-/member_email_hash
 ```
