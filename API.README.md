@@ -5,8 +5,9 @@
 - [PBL API Docs](#pbl-api-docs)
   - [Authentication](#authentication)
 - [Routes](#routes)
-  - [PBL Links](#pbl-links)
   - [Members](#members)
+  - [Points](#points)
+  - [PBL Links](#pbl-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -103,5 +104,23 @@ Routes:
 # gets search results (that you have permissions for)
 # expects searchTerm url parameter (?searchTerm=<<something>>)
 /search_golinks
+# POST: params dictionary of attributes
+/create_golink
+# params should look like
+{
+  'key': 'test-key',
+  'url': 'http://www.google.com',
+  'description': 'test link',
+  'permissions': 'Only Me'
+}
+# updates an existing golink
+# params should be same as above but include objectId
+/update_golink
+{
+  'key': 'test-key', 
+  ...
+  'objectId': 'ptRdXhFHzS'
+}
+
 
 ```
