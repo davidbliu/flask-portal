@@ -50,6 +50,8 @@ Routes:
 Routes: 
 - `/all_points`
 - `/get_member_points`
+- `/events`
+- `/attendance`
 
 ```python
 # an event looks like this
@@ -78,6 +80,14 @@ Routes:
 
 # all points returns a list of point dictionaries like above
 /all_points  
+
+# attendance returns a dictionary with keys being emails for your co-cms and values being a list of dictionary objects that look like
+{
+  'event_id': '123lk23j1l'
+  'type': 'chair'
+}
+# valid types are cm and chair
+/attendance
 ```
 
 ## PBL Links

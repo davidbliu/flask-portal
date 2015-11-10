@@ -32,9 +32,8 @@ def save_member_hash():
     params['where'] = json.dumps({'email': {'$exists': True}})
     members = parse_driver.make_parse_get_request('/1/classes/ParseMember', params)['results']
     for m in members:
-        h[m['email']] = m['email']
+        h[m['email']] = m
     save_pickle_key('member_email_hash', h)
-
 
 def save_pickle_key(key, obj):
     data = pickle.load(open(PICKLE_FILE, 'rb'))
@@ -47,8 +46,8 @@ def load_pickle_key(key):
 
 
 if __name__=='__main__':
-    # save_member_hash()
+    save_member_hash()
     # save_committee_members_hash()
     # save_events_hash()
-    h = load_pickle_key('member_email_hash')
-    print h.keys()
+    # h = load_pickle_key('member_email_hash')
+    # print h.keys()

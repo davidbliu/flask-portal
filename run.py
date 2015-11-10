@@ -3,8 +3,11 @@ from flask import Flask, request, jsonify, render_template,redirect, url_for, se
 from flask.ext.cors import CORS
 from flask_oauth import OAuth
 import sys,json
+
+# WD made scripts
 import parse_driver
 import utils
+import scripts # phase out. basically a constants that only change each semester
 
 app = Flask(__name__)
 app.secret_key = 'aslkdfjlsfj'
@@ -63,16 +66,32 @@ def get_member_points():
     events = get_events_by_id(eids)
     points = sum([x['points'] for x in events if 'points' in x.keys()])
     p = {'points':points, 'attendance':events}
-    return Response(json.dumps(p), mimetype='application/json')
+    return utils.get_response(p)
+
+@app.route('/events')
+def get_events():
+    params = {'limit':sys.maxint}
+    params['where'] = json.dumps({'semester_name': config.CURRENT_SEMESTER})
+    events = parse_driver.make_parse_get_request('/1/classes/ParseEvent', params)['results']
+    return utils.get_response(events)
 
 @app.route('/attendance')
 def attendance():
     requesterEmail = utils.get_email_from_token(request.args.get('token'))
-    emails = ['davidbliu@gmail.com', 'alice.sun94@gmail.com']
+    me = scripts.load_pickle_key('member_email_hash')[requesterEmail]
+    emails = scripts.load_pickle_key('committee_members_hash')[me['committee']]
+    emails = [x['email'] for x in emails]
     params = {'limit':sys.maxint, 'where': json.dumps({'member_email': {'$in':emails}})}
     event_members = parse_driver.make_parse_get_request('/1/classes/ParseEventMember', params)['results']
     # return a dictionary with keys emails, values list of attended events
-    return utils.get_response(event_members)
+    h = {}
+    seen = []
+    for em in event_members:
+        if em['member_email'] not in seen:
+            seen.append(em['member_email'])
+            h[em['member_email']] = []
+        h[em['member_email']].append({'event_id': em['event_id'], 'type': em['type']})
+    return utils.get_response(h)
 
 """ Blog """
 @app.route('/all_blogposts')
