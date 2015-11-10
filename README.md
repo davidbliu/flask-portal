@@ -9,11 +9,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # PBL Portal: Flask Edition
-Portal API Server here
+
+Portal API Server here. See http://pbl.link/pbl-front-end for the Frontend counterpart.
+
+or...use APIs and build your own
+
 
 ## Setting up to develop
 
 1. Clone this repo
+  * `git clone https://github.com/davidbliu/flask-portal.git`
 2. Install dependencies (see section on dependencies)
   * tl;dr is to run install.sh
 3. Set up config.py
