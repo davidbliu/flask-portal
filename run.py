@@ -4,18 +4,15 @@ from flask.ext.cors import CORS
 from flask_oauth import OAuth
 import sys,json
 import parse_driver
+import utils
 
 app = Flask(__name__)
 app.secret_key = 'aslkdfjlsfj'
 CORS(app)
 
 @app.route('/')
-def home():
+def test_route():
     return 'hello world'
-
-@app.route('/cookie')
-def cookie():
-    return request.cookies.get('email')
 
 """ Members """
 @app.route('/current_members')
@@ -68,12 +65,21 @@ def get_member_points():
     p = {'points':points, 'attendance':events}
     return Response(json.dumps(p), mimetype='application/json')
 
+@app.route('/attendance')
+def attendance():
+    requesterEmail = utils.get_email_from_token(request.args.get('token'))
+    emails = ['davidbliu@gmail.com', 'alice.sun94@gmail.com']
+    params = {'limit':sys.maxint, 'where': json.dumps({'member_email': {'$in':emails}})}
+    event_members = parse_driver.make_parse_get_request('/1/classes/ParseEventMember', params)['results']
+    # return a dictionary with keys emails, values list of attended events
+    return utils.get_response(event_members)
+
 """ Blog """
 @app.route('/all_blogposts')
 def all_blogposts():
     params = {'limit':sys.maxint, 'order': '-updatedAt'}
     posts = parse_driver.make_parse_get_request('/1/classes/BlogPost', params)['results']
-    return Response(json.dumps(posts), mimetype='application/json')
+    return utils.get_response(posts)
 
 """ GoLinks """
 
@@ -101,6 +107,7 @@ def create_golink():
 
 @app.route('/recent_golinks')
 def recent_golinks():
+    email = utils.get_email_from_token(request.args.get('token'))
     page = int(request.args.get('page', '0'))
     params = {}
     params['order'] = '-createdAt'
@@ -110,8 +117,7 @@ def recent_golinks():
     for x in results:
         if 'num_clicks' not in x.keys():
             x['num_clicks']=0
-    return Response(json.dumps(results), mimetype='application/json')
-
+    return utils.get_response(results)
 
 @app.route('/search_golinks')
 def search_golinks():
