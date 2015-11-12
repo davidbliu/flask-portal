@@ -5,6 +5,11 @@
 - [PBL Portal: Flask Edition](#pbl-portal-flask-edition)
   - [Setting up to develop](#setting-up-to-develop)
   - [Dependencies](#dependencies)
+  - [Files](#files)
+    - [run.py](#runpy)
+    - [parse_driver.py](#parse_driverpy)
+    - [utils.py](#utilspy)
+    - [mail_driver.py](#mail_driverpy)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -44,9 +49,13 @@ or...use APIs and build your own
 
 ## Files
 
-read this to understand what files are being used and for what in this repository 
+most of the work is done in run.py. drivers are the interfaces to external libraries (like parse) that run.py uses. (run.py should import all drivers)
 
-### app.py
+utils has a bunch of commonly used tasks (for example converting access tokens to emails)
+
+scripts is a temporary fix to caching. it holds some cached variables including member email hash, event hash (from id to event), etc. eventually it will be phased out to redis_driver.py or other
+
+### run.py
 
 Add new routes here. imports all helper files (like `import parse_driver as ParseDriver` for example)
 
@@ -79,6 +88,9 @@ get_email_from_token(token):
 ```
 
 ### mail_driver.py
+work in progress.
+use this file to send emails (required for blog).
+
 
 
 

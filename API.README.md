@@ -46,12 +46,37 @@ Routes:
 # return dictionary, keys are emails and values are members (dictionaries)
 /member_email_hash
 ```
+
+## Tabling
+Routes:
+- `/tabling_slots`
+- `/schedule`
+- `/save_schedule` (POST) (take 'schedule': list of available slots)
+
+```python
+# the post request to save_schedule needs a dict looking like this
+{
+  'schedule': ['8', '9', '10', .... ]
+}
+
+# a tabling slot looks like this
+{
+  'time': 10,
+  'member_emails': [
+      'davidbliu@gmail.com',
+      'alice.sun94@gmail.com',
+      'berkeleypbl.webdev@gmail.com'
+  ]
+}
+```
+
 ## Points
 Routes: 
 - `/all_points`
 - `/get_member_points`
 - `/events`
 - `/attendance`
+- `/record_attendance`
 
 ```python
 # an event looks like this
@@ -88,15 +113,29 @@ Routes:
 }
 # valid types are cm and chair
 /attendance
+
+# record attendance takes in a dict looking like
+{
+  'event_id': 'l24kjl23k4',
+  'email': 'davidbliu@gmail.com'
+}
 ```
 
 ## PBL Links
 Routes:
-- `/go/<<key>>`
+- `/go/<<key>>` (used in redirects, not important)
 - `/recent_golinks`
 - `/search_golinks?searchTerm=<<searchTerm here>>`
 - `/create_golink` (POST)
-- `/update_golink` (POST) 
+- `/update_golink` (POST) (TODO)
+- `/my_links`
+- `/popular_golinks`
+
+recent, my, and popular take no parameters except optional page=?<<page>> param
+
+search takes searchTerm param
+
+create and update take golink objects as param. 
 
 ```python
 # golinks are returned as dicts that look like
@@ -131,6 +170,36 @@ Routes:
   ...
   'objectId': 'ptRdXhFHzS'
 }
+```
 
+
+## Blog
+
+Routes: 
+- `/all_blogposts`
+- `/save_blogpost` (POST)
+- `/get_blogpost`
+- `/delete_blogpost`
+
+delete, and get take id as a request param (?id=<<id here>>)
+
+save takes a post json object in the request params
+
+```python
+# a blogpost is a dictionary that looks like this
+{
+  'title': 'Example Title',
+  'content': '<h1>html content here</h1>',
+  'author': 'davidbliu@gmail.com',
+  'last_editor': 'berkeleypbl.webdev@gmail.com',
+  'view_permissions': 'Anyone',
+  'edit_permissions': 'Only Me', 
+  'timestamp': '<<some time string>>',
+  'createdAt': '<<some time string>>',
+  'updatedAt': '<<some time string>>'
+}
+
+# possible view and edit permissions are the same as for golinks, they include
+['Only Me', 'Only Execs', 'Only Officers', 'Only PBL', 'Anyone']
 
 ```
