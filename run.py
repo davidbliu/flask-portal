@@ -33,6 +33,7 @@ def member_email_hash():
     return Response(json.dumps(h), mimetype = 'application/json')
 
 """ Tabling """
+
 @app.route('/tabling_slots')
 def tabling_slots():
     params = {'limit': sys.maxint}
@@ -40,6 +41,17 @@ def tabling_slots():
     for slot in tabling_slots:
         slot['member_emails'] = slot['member_emails'].split(',')
     return Response(json.dumps(tabling_slots), mimetype = 'application/json')
+
+
+@app.route('/schedule')
+def schedule():
+   myEmail = utils.get_email_from_token(request.args.get('token'))
+   params = {'where':json.dumps({'member_email': myEmail})}
+   schedule = ParseDriver.make_parse_get_request('/1/classes/Commitments', params)['results']
+   if len(schedule) == 0:
+       return 'no schedule found', 404
+   schedule = schedule[0]
+   return utils.get_response(schedule['commitments'])
 
 """ Points """
 
@@ -57,6 +69,7 @@ def get_events_by_id(eids):
 
     result = ParseDriver.make_parse_get_request('/1/classes/ParseEvent', params)
     return result['results']
+
 
 @app.route('/get_member_points')
 def get_member_points():
@@ -116,6 +129,10 @@ def record_attendance():
         ParseDriver.make_parse_put_request(url,  data)
 
     return 'ok'
+
+@app.route('/all_points')
+def all_points():
+    return 'not implemented yet'
 
 """ Blog """
 @app.route('/all_blogposts')
