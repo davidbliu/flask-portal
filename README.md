@@ -28,7 +28,7 @@ or...use APIs and build your own
   * or ask chairs (davidbliu@gmail.com)
 4. Run the flask server
   * `sh run.sh` from the root directory
-5. see [API Docs](api.README.md) and [Files](#files)
+5. see [API Docs](API.README.md) and [Files](#files)
  
 ## Dependencies 
 
