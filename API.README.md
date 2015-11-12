@@ -6,8 +6,11 @@
   - [Authentication](#authentication)
 - [Routes](#routes)
   - [Members](#members)
+  - [Tabling](#tabling)
   - [Points](#points)
   - [PBL Links](#pbl-links)
+  - [Blog](#blog)
+- [html content here](#html-content-here)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
