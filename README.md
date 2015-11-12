@@ -20,7 +20,7 @@ or...use APIs and build your own
 1. Clone this repo
   * `git clone https://github.com/davidbliu/flask-portal.git`
 2. Install dependencies (see section on dependencies)
-  * tl;dr is to run install.sh
+  * tl;dr is to run `sh install.sh`
 3. Set up config.py
   * config.py contains sensitive app keys etc that we dont want to commit
   * see example.config.py for what app keys and ids you need
@@ -41,3 +41,19 @@ or...use APIs and build your own
   * `pip install Flask-Oauth`
 * CORS
   * `pip install -U flask-cors`
+
+## Files
+
+read this to understand what files are being used and for what in this repository 
+
+### app.py
+
+### parse_driver.py
+
+### utils.py
+
+### mail_driver.py
+
+
+
+
