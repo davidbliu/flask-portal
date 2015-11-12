@@ -13,6 +13,10 @@ def get_position(email):
 def get_response(obj):
     return Response(json.dumps(obj), mimetype='application/json')
 
+""" get Personal information """
+
+def get_position_from_email(email):
+    return 'chair'
 
 """ Points and attendance """
 

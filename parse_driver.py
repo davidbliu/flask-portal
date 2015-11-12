@@ -49,3 +49,18 @@ def make_parse_put_request(url, obj):
     result = json.loads(connection.getresponse().read())
     return result
 
+
+def make_parse_delete_request(url):
+    connection = get_connection()
+    connection.request(
+        'DELETE', 
+        url,
+        '',
+        {
+            "X-Parse-Application-Id": config.PARSE_APP_ID,
+            "X-Parse-REST-API-Key": config.PARSE_REST_API_KEY
+        }
+    )
+    result = json.loads(connection.getresponse().read())
+    return result
+

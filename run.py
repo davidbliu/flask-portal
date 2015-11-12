@@ -2,10 +2,10 @@ import config
 from flask import Flask, request, jsonify, render_template,redirect, url_for, session, Response, make_response
 from flask.ext.cors import CORS
 from flask_oauth import OAuth
-import sys,json
+import sys,json,datetime
 
 # WD made scripts
-import parse_driver
+import parse_driver as ParseDriver
 import utils
 import scripts # phase out. basically a constants that only change each semester
 
@@ -21,14 +21,14 @@ def test_route():
 @app.route('/current_members')
 def current_members():
     params = {'limit': sys.maxint, 'where': json.dumps({'latest_semester': config.CURRENT_SEMESTER})}
-    members = parse_driver.make_parse_get_request('/1/classes/ParseMember', params)['results']
+    members = ParseDriver.make_parse_get_request('/1/classes/ParseMember', params)['results']
     return Response(json.dumps(members), mimetype='application/json')
 
 @app.route('/member_email_hash')
 def member_email_hash():
     params = {'limit': sys.maxint}
     params['where'] = json.dumps({'email': {'$exists':True}})
-    members = parse_driver.make_parse_get_request('/1/classes/ParseMember', params)['results']
+    members = ParseDriver.make_parse_get_request('/1/classes/ParseMember', params)['results']
     h= dict((x['email'], x) for x in members)
     return Response(json.dumps(h), mimetype = 'application/json')
 
@@ -36,7 +36,7 @@ def member_email_hash():
 @app.route('/tabling_slots')
 def tabling_slots():
     params = {'limit': sys.maxint}
-    tabling_slots = parse_driver.make_parse_get_request('/1/classes/ParseTablingSlot', params)['results']
+    tabling_slots = ParseDriver.make_parse_get_request('/1/classes/ParseTablingSlot', params)['results']
     for slot in tabling_slots:
         slot['member_emails'] = slot['member_emails'].split(',')
     return Response(json.dumps(tabling_slots), mimetype = 'application/json')
@@ -48,14 +48,14 @@ def get_attendance(email):
     params['where'] = json.dumps({
         'member_email': email
         })
-    result = parse_driver.make_parse_get_request('/1/classes/ParseEventMember', params)
+    result = ParseDriver.make_parse_get_request('/1/classes/ParseEventMember', params)
     return result['results']
 
 def get_events_by_id(eids):
     params = {'limit':sys.maxint,
             'where': json.dumps( {'google_id': {'$in': eids}})}
 
-    result = parse_driver.make_parse_get_request('/1/classes/ParseEvent', params)
+    result = ParseDriver.make_parse_get_request('/1/classes/ParseEvent', params)
     return result['results']
 
 @app.route('/get_member_points')
@@ -72,7 +72,7 @@ def get_member_points():
 def get_events():
     params = {'limit':sys.maxint}
     params['where'] = json.dumps({'semester_name': config.CURRENT_SEMESTER})
-    events = parse_driver.make_parse_get_request('/1/classes/ParseEvent', params)['results']
+    events = ParseDriver.make_parse_get_request('/1/classes/ParseEvent', params)['results']
     return utils.get_response(events)
 
 @app.route('/attendance')
@@ -82,7 +82,7 @@ def attendance():
     emails = scripts.load_pickle_key('committee_members_hash')[me['committee']]
     emails = [x['email'] for x in emails]
     params = {'limit':sys.maxint, 'where': json.dumps({'member_email': {'$in':emails}})}
-    event_members = parse_driver.make_parse_get_request('/1/classes/ParseEventMember', params)['results']
+    event_members = ParseDriver.make_parse_get_request('/1/classes/ParseEventMember', params)['results']
     # return a dictionary with keys emails, values list of attended events
     h = {}
     seen = []
@@ -93,19 +93,76 @@ def attendance():
         h[em['member_email']].append({'event_id': em['event_id'], 'type': em['type']})
     return utils.get_response(h)
 
+@app.route('/record_attendance', methods = ['POST'])
+def record_attendance():
+    form = request.get_json()
+    myEmail = utils.get_email_from_token(request.args.get('token'))
+    event_id = form.get('event_id')
+    email = form.get('email')
+    params = {'where': json.dumps({'event_id': event_id, 'member_email': email})}
+    ems = ParseDriver.make_parse_get_request('/1/classes/ParseEventMember', params)['results']
+    myPosition = utils.get_position_from_email(myEmail)
+    if myPosition == 'exec':
+        myPosition = 'chair'
+    if len(ems) == 0:
+        print 'there are no ems that match'
+        data = {'event_id': event_id, 'member_email': email, 'type': myPosition}
+        ParseDriver.make_parse_post_request('/1/classes/ParseEventMember', data)
+    else:
+        print 'there are matching ems ('+str(len(ems))+')'
+        em = ems[0]
+        url = '/1/classes/ParseEventMember/'+em['objectId']
+        data = {'type':myPosition}
+        ParseDriver.make_parse_put_request(url,  data)
+
+    return 'ok'
+
 """ Blog """
 @app.route('/all_blogposts')
 def all_blogposts():
     params = {'limit':sys.maxint, 'order': '-updatedAt'}
-    posts = parse_driver.make_parse_get_request('/1/classes/BlogPost', params)['results']
+    posts = ParseDriver.make_parse_get_request('/1/classes/BlogPost', params)['results']
     return utils.get_response(posts)
+
+@app.route('/get_blogpost')
+def get_blogpost():
+    post_id = request.args.get('id')
+    post = ParseDriver.make_parse_get_request('/1/classes/BlogPost/'+str(post_id), '')
+    print post
+    return utils.get_response(post)
+
+@app.route('/delete_blogpost')
+def delete_blogpost():
+    post_id = request.args.get('id')
+    ParseDriver.make_parse_delete_request('/1/classes/BlogPost/'+str(post_id))
+    return 'ok'
+
+@app.route('/save_blogpost', methods = ['POST'])
+def save_blogpost():
+    myEmail =utils.get_email_from_token(request.args.get('token')) 
+    post = request.get_json()
+    post['last_editor'] = myEmail
+    # date = datetime.datetime.utcnow().strftime('%Y-%m-%dT%M:%S.000Z')
+    # post['timestamp'] = {'__type': 'Date', 'iso': date}
+    objectId = post.get('objectId')
+    if objectId != None and objectId != '':
+        print 'this is an existing post'
+        url = '/1/classes/BlogPost/'+objectId
+        ParseDriver.make_parse_put_request(url, post)
+    else: 
+        print 'this is a new post'
+        post['author'] = myEmail
+        print post
+        resp = ParseDriver.make_parse_post_request('/1/classes/BlogPost', post)
+        print resp
+    return 'ok'
 
 """ GoLinks """
 
 @app.route('/go/<key>')
 def go(key):
     params = {'where': json.dumps({'key':key})}
-    golinks = parse_driver.make_parse_get_request('/1/classes/ParseGoLink',params)['results']
+    golinks = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink',params)['results']
     if len(golinks)==0:
         return 'not a valid key'
     else:
@@ -113,6 +170,7 @@ def go(key):
 
 @app.route('/create_golink',methods=['POST'])
 def create_golink():
+    senderEmail = utils.get_email_from_token(request.args.get('token'))
     form = request.get_json()
     golink = {'key': form.get('key'),
             'url': form.get('url'),
@@ -121,7 +179,7 @@ def create_golink():
             'permissions': form.get('permissions', 'Anyone'),
             'tags': form.get('tags', [])
             }
-    parse_driver.make_parse_post_request('/1/classes/ParseGoLink', golink)
+    ParseDriver.make_parse_post_request('/1/classes/ParseGoLink', golink)
     return 'ok'
 
 @app.route('/recent_golinks')
@@ -131,7 +189,39 @@ def recent_golinks():
     params = {}
     params['order'] = '-createdAt'
     params['skip']=page*100
-    r = parse_driver.make_parse_get_request('/1/classes/ParseGoLink', params)
+    r = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink', params)
+    results = r['results']
+    for x in results:
+        if 'num_clicks' not in x.keys():
+            x['num_clicks']=0
+    return utils.get_response(results)
+
+
+@app.route('/my_links')
+def my_links():
+    email = utils.get_email_from_token(request.args.get('token'))
+    page = int(request.args.get('page', '0'))
+    params = {}
+    params['order'] = '-createdAt'
+    params['skip']=page*100
+    params['where']= json.dumps({'member_email': email})
+    r = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink', params)
+    results = r['results']
+    for x in results:
+        if 'num_clicks' not in x.keys():
+            x['num_clicks']=0
+    return utils.get_response(results)
+
+
+@app.route('/popular_golinks')
+def popular_golinks():
+    email = utils.get_email_from_token(request.args.get('token'))
+    page = int(request.args.get('page', '0'))
+    params = {}
+    params['order'] = '-num_clicks'
+    params['skip']=page*100
+    params['where']= json.dumps({'member_email': email})
+    r = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink', params)
     results = r['results']
     for x in results:
         if 'num_clicks' not in x.keys():
@@ -146,7 +236,7 @@ def search_golinks():
         {'tags':{'$in':[searchTerm]}}
         ]}
     params = {'where':json.dumps(where)}
-    results = parse_driver.make_parse_get_request('/1/classes/ParseGoLink', params)
+    results = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink', params)
     results = results['results']
     return Response(json.dumps(results), mimetype='application/json')
     
@@ -154,7 +244,7 @@ def search_golinks():
 @app.route('/count_golinks')
 def count_golinks():
     params = {'count':1}
-    r = parse_driver.make_parse_get_request('/1/classes/ParseGoLink', params)
+    r = ParseDriver.make_parse_get_request('/1/classes/ParseGoLink', params)
     return r['count'] 
 
 """ Google Oauth """
@@ -223,7 +313,7 @@ def get_access_token():
 if __name__ == "__main__":
     try:
         port = int(sys.argv[1])
-        app.run(host='0.0.0.0', port=port, debug=True)
+        app.run(host='0.0.0.0', port=port, debug=False)
     except:
         port = 3000
         app.run(host='0.0.0.0', port=port, debug=True)
