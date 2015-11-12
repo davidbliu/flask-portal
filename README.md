@@ -48,9 +48,35 @@ read this to understand what files are being used and for what in this repositor
 
 ### app.py
 
+Add new routes here. imports all helper files (like `import parse_driver as ParseDriver` for example)
+
 ### parse_driver.py
 
+handles making GET, POST, PUT, DELETE requests to parse, etc.
+
+for most requests, you need only pass in the url (ex `/1/classes/ParseMember`) and a dictionary of params (see ex below)
+see http://pbl.link/parse-rest-api for more about how to construct valid params
+
+```python
+{
+  'limit': sys.maxint,
+  'where': json.dumps({
+      'email': 'davidbliu@gmail.com',
+   }),
+}
+```
+
 ### utils.py
+
+has the following convenience methods
+```python
+get_response(obj):
+  # returns json response, obj can be python list or dict
+
+get_email_from_token(token):
+  # gets string from token
+  # ex token: 6461766964626c697540676d61696c2e636f6d
+```
 
 ### mail_driver.py
 
