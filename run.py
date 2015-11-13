@@ -56,15 +56,18 @@ def schedule():
 @app.route('/save_schedule', methods = ['POST'])
 def save_schedule():
     myEmail = utils.get_email_from_token(request.args.get('token'))
-    schedule = request.get_json().get('schedule')
+    times = request.get_json().get('schedule')
     params = {'where':json.dumps({'member_email': myEmail})}
     schedule = ParseDriver.make_parse_get_request('/1/classes/Commitments', params)['results']
+    s = {'member_email': myEmail, 'commitments': times}
+    print 'schedule was '+str(s)
     if len(schedule) == 0:
-        print 'schedule doesnt already exists'
+        ParseDriver.make_parse_post_request('/1/classes/Commitments', s)
     else:
-        print 'schedule already exists'
-
+        sid = schedule[0].get('objectId')
+        ParseDriver.make_parse_put_request('/1/classes/Commitments/'+sid, s)
     return 'ok'
+
 """ Points """
 
 def get_attendance(email):
@@ -209,6 +212,24 @@ def create_golink():
                 'tags': form.get('tags', [])
                 }
      ParseDriver.make_parse_post_request('/1/classes/ParseGoLink', golink)
+     return 'ok'
+
+
+@app.route('/save_golink',methods=['POST'])
+def save_golink():
+     myEmail = utils.get_email_from_token(request.args.get('token'))
+     golink = request.get_json()
+     golink_id = golink.get('objectId')
+     golink['member_email'] = myEmail
+     permissions = golink.get('permissions')
+     if permissions == None or permissions == '':
+         golink['permissions'] = 'Anyone'
+     if golink_id == None or golink_id == '':
+         print 'creating a new golink'
+         ParseDriver.make_parse_post_request('/1/classes/ParseGoLink', golink)
+     else:
+         print 'editing an existing golink'
+         ParseDriver.make_parse_put_request('/1/classes/ParseGoLink/'+golink_id, golink)
      return 'ok'
 
 @app.route('/recent_golinks')
